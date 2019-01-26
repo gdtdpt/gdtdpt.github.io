@@ -13,16 +13,16 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="John Doe">
+    <meta name="author" content="Richard Wong">
     <meta name="renderer" content="webkit">
-    <meta name="copyright" content="John Doe">
+    <meta name="copyright" content="Richard Wong">
     
-    <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="keywords" content="Richard,Richard Wong,Blog">
     
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Flutter ListView 教程 – 做一个体重追踪APP 1（FLUTTER LISTVIEW TUTORIAL – WEIGHTTRACKER 1） · Richard Wong&#39;s Blog</title>
+    <title>Flutter ListView 教程 – 做一个体重追踪APP 1 · Richard Wong&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Richard Wong&#39;s Blog</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Flutter ListView 教程 – 做一个体重追踪APP 1（FLUTTER LISTVIEW TUTORIAL – WEIGHTTRACKER 1）</a>
+                <a href="#" class="post-name">Flutter ListView 教程 – 做一个体重追踪APP 1</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Flutter ListView 教程 – 做一个体重追踪APP 1（FLUTTER LISTVIEW TUTORIAL – WEIGHTTRACKER 1）
+            Flutter ListView 教程 – 做一个体重追踪APP 1
             <!-- 404 -->
             
         </h1>
@@ -404,16 +404,19 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/flutter-listview/" target="_blank" rel="noopener">https://marcinszalek.pl/flutter/flutter-listview/</a></p>
+<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/flutter-listview/" target="_blank" rel="noopener">FLUTTER LISTVIEW TUTORIAL – WEIGHTTRACKER 1</a></p>
 </blockquote>
 <blockquote>
 <p>英语水平有限，内容未必准确</p>
 </blockquote>
-<h2 id="在Flutter里创建一个ListView"><a href="#在Flutter里创建一个ListView" class="headerlink" title="在Flutter里创建一个ListView"></a>在Flutter里创建一个ListView</h2><h3 id="1-一个简单的ListView"><a href="#1-一个简单的ListView" class="headerlink" title="1. 一个简单的ListView"></a>1. 一个简单的ListView</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HomePage</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  HomePage(&#123;Key key, <span class="keyword">this</span>.title&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> title;</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _HomePageState createState() =&gt; <span class="keyword">new</span> _HomePageState();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_HomePageState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">HomePage</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; strings = <span class="keyword">new</span> <span class="built_in">List</span>();</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">void</span> _addWeightSave() &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      strings.add(<span class="string">"new string"</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Scaffold(</span><br><span class="line">      appBar: <span class="keyword">new</span> AppBar(</span><br><span class="line">        title: <span class="keyword">new</span> Text(widget.title),</span><br><span class="line">      ),</span><br><span class="line">      body: <span class="keyword">new</span> ListView(</span><br><span class="line">        children:</span><br><span class="line">        strings.map((<span class="built_in">String</span> string) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> Row(</span><br><span class="line">            children: [</span><br><span class="line">              <span class="keyword">new</span> Text(string)</span><br><span class="line">            ],</span><br><span class="line">          );</span><br><span class="line">        &#125;).toList(),</span><br><span class="line">      ),</span><br><span class="line"> </span><br><span class="line">      floatingActionButton: <span class="keyword">new</span> FloatingActionButton(</span><br><span class="line">        onPressed: _addWeightSave,</span><br><span class="line">        tooltip: <span class="string">'Add new weight entry'</span>,</span><br><span class="line">        child: <span class="keyword">new</span> Icon(Icons.add),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="在Flutter里创建一个ListView"><a href="#在Flutter里创建一个ListView" class="headerlink" title="在Flutter里创建一个ListView"></a>在Flutter里创建一个ListView</h2><a id="more"></a>
+<h3 id="1-一个简单的ListView"><a href="#1-一个简单的ListView" class="headerlink" title="1. 一个简单的ListView"></a>1. 一个简单的ListView</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HomePage</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  HomePage(&#123;Key key, <span class="keyword">this</span>.title&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> title;</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _HomePageState createState() =&gt; <span class="keyword">new</span> _HomePageState();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_HomePageState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">HomePage</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; strings = <span class="keyword">new</span> <span class="built_in">List</span>();</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">void</span> _addWeightSave() &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      strings.add(<span class="string">"new string"</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Scaffold(</span><br><span class="line">      appBar: <span class="keyword">new</span> AppBar(</span><br><span class="line">        title: <span class="keyword">new</span> Text(widget.title),</span><br><span class="line">      ),</span><br><span class="line">      body: <span class="keyword">new</span> ListView(</span><br><span class="line">        children:</span><br><span class="line">        strings.map((<span class="built_in">String</span> string) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> Row(</span><br><span class="line">            children: [</span><br><span class="line">              <span class="keyword">new</span> Text(string)</span><br><span class="line">            ],</span><br><span class="line">          );</span><br><span class="line">        &#125;).toList(),</span><br><span class="line">      ),</span><br><span class="line"> </span><br><span class="line">      floatingActionButton: <span class="keyword">new</span> FloatingActionButton(</span><br><span class="line">        onPressed: _addWeightSave,</span><br><span class="line">        tooltip: <span class="string">'Add new weight entry'</span>,</span><br><span class="line">        child: <span class="keyword">new</span> Icon(Icons.add),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>从这段代码能想像到我构建的是一个最简单的ListView。</p>
 <p>ListView 部件（widget）是列表的主容器，它装载着所有的内容，但是我们只需要关注它的children属性。</p>
 <p>我们需要给ListView.children提供一个部件列表（list of Widgets）用于显示。所以我们用经过初始化后的装着String的List来生成每一行的容器，每一行的容器内只装着一个字符串。</p>
-<p>这样我们就得到了下面这样的一个列表。<br><img src="/assets/flutter_listview_1.gif" alt="flutter_listview_1"><br>现在让我们做一些不是Hello World的事情。</p>
+<p>这样我们就得到了下面这样的一个列表。</p>
+<p><img src="/assets/flutter_listview_1.gif" alt="flutter_listview_1"></p>
+<p>现在让我们做一些不是Hello World的事情。</p>
 <h3 id="2-复杂的行布局"><a href="#2-复杂的行布局" class="headerlink" title="2. 复杂的行布局"></a>2. 复杂的行布局</h3><h4 id="2-1-创建model"><a href="#2-1-创建model" class="headerlink" title="2.1 创建model"></a>2.1 创建model</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WeightSave</span> </span>&#123;</span><br><span class="line">  <span class="built_in">DateTime</span> dateTime;</span><br><span class="line">  <span class="built_in">double</span> weight;</span><br><span class="line"> </span><br><span class="line">  WeightSave(<span class="keyword">this</span>.dateTime, <span class="keyword">this</span>.weight);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="2-2-创建布局"><a href="#2-2-创建布局" class="headerlink" title="2.2 创建布局"></a>2.2 创建布局</h4><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pubspace.yaml</span></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line"><span class="attr">  flutter:</span></span><br><span class="line"><span class="attr">    sdk:</span> <span class="string">flutter</span></span><br><span class="line"><span class="attr">  intl:</span> <span class="string">^0.15.7</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'package:intl/intl.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'package:weight_tracker/model/WeightSave.dart'</span>;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WeightListItem</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> WeightSave weightSave;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">double</span> weightDifference;</span><br><span class="line"> </span><br><span class="line">  WeightListItem(<span class="keyword">this</span>.weightSave, <span class="keyword">this</span>.weightDifference);</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Padding(</span><br><span class="line">      padding: <span class="keyword">new</span> EdgeInsets.all(<span class="number">16.0</span>),</span><br><span class="line">      child: <span class="keyword">new</span> Row(children: [</span><br><span class="line">        <span class="keyword">new</span> Expanded(</span><br><span class="line">            child: <span class="keyword">new</span> Column(children: [</span><br><span class="line">              <span class="keyword">new</span> Text(</span><br><span class="line">                <span class="keyword">new</span> DateFormat.yMMMMd().format(weightSave.dateTime),</span><br><span class="line">                textScaleFactor: <span class="number">0.9</span>,</span><br><span class="line">                textAlign: TextAlign.left,</span><br><span class="line">              ),</span><br><span class="line">              <span class="keyword">new</span> Text(</span><br><span class="line">                <span class="keyword">new</span> DateFormat.EEEE().format(weightSave.dateTime),</span><br><span class="line">                textScaleFactor: <span class="number">0.8</span>,</span><br><span class="line">                textAlign: TextAlign.right,</span><br><span class="line">                style: <span class="keyword">new</span> TextStyle(</span><br><span class="line">                  color: Colors.grey,</span><br><span class="line">                ),</span><br><span class="line">              ),</span><br><span class="line">            ], crossAxisAlignment: CrossAxisAlignment.start)),</span><br><span class="line">        <span class="keyword">new</span> Expanded(</span><br><span class="line">            child: <span class="keyword">new</span> Text(</span><br><span class="line">              weightSave.weight.toString(),</span><br><span class="line">              textScaleFactor: <span class="number">2.0</span>,</span><br><span class="line">              textAlign: TextAlign.center,</span><br><span class="line">            )),</span><br><span class="line">        <span class="keyword">new</span> Expanded(</span><br><span class="line">            child: <span class="keyword">new</span> Text(</span><br><span class="line">              weightDifference.toString(),</span><br><span class="line">              textScaleFactor: <span class="number">1.6</span>,</span><br><span class="line">              textAlign: TextAlign.right,</span><br><span class="line">            )),</span><br><span class="line">      ]),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -421,7 +424,8 @@ height:50vh;
 <p>padding的子节点（child）是一个Row容器，包含了3个子节点（children），Row部件（widget）内部的所有部件会水平排列。</p>
 <p>为了让Row内部3个部件每个都占1/3的空间，所以3个部件都使用了Expanded来包装。</p>
 <p>左边的列是一个Column部件。Column跟Row类似，不过是纵向排列。在Column.children里我们放置了两个Text用于显示model对象的时间和星期。</p>
-<p>中间和右边的列都是一个简单的Text部件，中间列设计为显示保存的重量，右边的列用于显示跟前一项重量的差值。<br><img src="/assets/flutter_listview_2.gif" alt="flutter_listview_2"></p>
+<p>中间和右边的列都是一个简单的Text部件，中间列设计为显示保存的重量，右边的列用于显示跟前一项重量的差值。</p>
+<p><img src="/assets/flutter_listview_2.gif" alt="flutter_listview_2"></p>
 <h4 id="2-3-把这些都组装起来"><a href="#2-3-把这些都组装起来" class="headerlink" title="2.3 把这些都组装起来"></a>2.3 把这些都组装起来</h4><p>用我们的新的WeightListItem布局对象替换掉前面每行的布局（记得添加import）</p>
 <figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'dart:math'</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'package:weight_tracker/WeightListItem.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'package:weight_tracker/model/WeightSave.dart'</span>;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HomePage</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  HomePage(&#123;Key key, <span class="keyword">this</span>.title&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> title;</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _HomePageState createState() =&gt; <span class="keyword">new</span> _HomePageState();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_HomePageState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">HomePage</span>&gt; </span>&#123;</span><br><span class="line">  <span class="built_in">List</span>&lt;WeightSave&gt; weightSaves = <span class="keyword">new</span> <span class="built_in">List</span>();</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">void</span> _addWeightSave() &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      weightSaves.add(<span class="keyword">new</span> WeightSave(</span><br><span class="line">          <span class="keyword">new</span> <span class="built_in">DateTime</span>.now(), <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>).toDouble()));</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Scaffold(</span><br><span class="line">      appBar: <span class="keyword">new</span> AppBar(</span><br><span class="line">        title: <span class="keyword">new</span> Text(widget.title),</span><br><span class="line">      ),</span><br><span class="line">      body: <span class="keyword">new</span> ListView(</span><br><span class="line">        children: weightSaves.map((WeightSave weightSave) &#123;</span><br><span class="line">          <span class="comment">//calculating difference</span></span><br><span class="line">          <span class="built_in">double</span> difference = weightSaves.first == weightSave</span><br><span class="line">              ? <span class="number">0.0</span></span><br><span class="line">              : weightSave.weight -</span><br><span class="line">                  weightSaves[weightSaves.indexOf(weightSave) - <span class="number">1</span>].weight;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> WeightListItem(weightSave, difference);</span><br><span class="line">        &#125;).toList(),</span><br><span class="line">      ),</span><br><span class="line">      floatingActionButton: <span class="keyword">new</span> FloatingActionButton(</span><br><span class="line">        onPressed: _addWeightSave,</span><br><span class="line">        tooltip: <span class="string">'Add new weight entry'</span>,</span><br><span class="line">        child: <span class="keyword">new</span> Icon(Icons.add),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这样就完成了！</p>
@@ -431,22 +435,9 @@ height:50vh;
     </article>
     <!-- license  -->
     
-        <div class="license-wrapper">
-            <p>原文作者：<a href="http://yoursite.com">John Doe</a>
-            </p><p>原文链接：<a href="http://yoursite.com/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1（FLUTTER-LISTVIEW-TUTORIAL-–-WEIGHTTRACKER-1）/">http://yoursite.com/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1（FLUTTER-LISTVIEW-TUTORIAL-–-WEIGHTTRACKER-1）/</a>
-            </p><p>发表日期：<a href="http://yoursite.com/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1（FLUTTER-LISTVIEW-TUTORIAL-–-WEIGHTTRACKER-1）/">January 17th 2019, 12:00:49 am</a>
-            </p><p>更新日期：<a href="http://yoursite.com/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1（FLUTTER-LISTVIEW-TUTORIAL-–-WEIGHTTRACKER-1）/">January 27th 2019, 12:22:40 am</a>
-            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
-    
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2019/01/26/hello-world/" title="Hello World">
-                    <div class="nextTitle">Hello World</div>
-                </a>
             
         </li>
         <li class="previous">
@@ -584,16 +575,9 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 2
+        Total : 1
         </div>
         <!-- search  -->
         
@@ -604,26 +588,12 @@ top:50vh;
     
     
     
-    <div class="archive-year"> Invalid date </div>
-    <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href="/2019/01/26/hello-world/">Hello World</a>
-        </li>
-    
-    
-    
-    
-    
-        </ul>
-    
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/17</span><a class="archive-post-title" href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1（FLUTTER-LISTVIEW-TUTORIAL-–-WEIGHTTRACKER-1）/">Flutter ListView 教程 – 做一个体重追踪APP 1（FLUTTER LISTVIEW TUTORIAL – WEIGHTTRACKER 1）</a>
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1/">Flutter ListView 教程 – 做一个体重追踪APP 1</a>
         </li>
     
     </ul></div>
@@ -668,6 +638,8 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
+        <span class="sidebar-category-name" data-categories="Flutter"><span class="iconfont-archer">&#xe60a;</span>Flutter</span>
+    
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
     <div class="sidebar-categories-list"></div>
@@ -677,7 +649,7 @@ jsonContent:
     <script>
     var siteMeta = {
         root: "/",
-        author: "John Doe"
+        author: "Richard Wong"
     }
 </script>
     <!-- CDN failover -->
