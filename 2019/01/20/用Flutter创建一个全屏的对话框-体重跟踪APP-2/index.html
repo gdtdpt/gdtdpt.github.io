@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Richard Wong">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Richard Wong">
+    
+    <meta name="keywords" content="Richard,Richard Wong,Blog">
+    
+    <meta name="description" content="">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>用Flutter创建一个全屏的对话框 - 体重跟踪APP 2 · Richard Wong&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin="">
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin="">
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Richard Wong&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">用Flutter创建一个全屏的对话框 - 体重跟踪APP 2</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Richard Wong's Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            用Flutter创建一个全屏的对话框 - 体重跟踪APP 2
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.2k</span>阅读时长: <span class="post-count reading-time">8 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/01/20</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/flutter-fullscreendialog-tutorial-weighttracker-ii/" target="_blank" rel="noopener">CREATING FULL-SCREEN DIALOG IN FLUTTER – WEIGHTTRACKER 2</a></p>
+</blockquote>
+<blockquote>
+<p>此篇文章中的代码并不包括所有的代码改动，有部分细节没有给出，需要自行发现。</p>
+</blockquote>
+<blockquote>
+<p>英语水平有限，内容未必准确</p>
+</blockquote>
+<p>在这篇文章里我将一步步创建一个全屏的对话框（dialog）。像这样的全屏对话框比普通的对话框更适用于复杂的用户操作。你可以在<a href="https://material.io/guidelines/components/dialogs.html#dialogs-full-screen-dialogs" target="_blank" rel="noopener">Material Design的说明书</a>中了解到更多内容。好在Flutter框架提供了非常容易的方法创建和使用全屏提示框。你可以在Flutter的<a href="https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/full_screen_dialog_demo.dart" target="_blank" rel="noopener">Gallery app</a>中找到它。</p>
+<p>提供一个提示框是我的<a href="https://marcinszalek.pl/tag/weight-tracker/" target="_blank" rel="noopener">Weight Tracker</a>应用的一部分（一个简单的体重跟踪应用），所以开发内容将以此为基础和目标。</p>
+<a id="more"></a>
+<h2 id="创建基础UI"><a href="#创建基础UI" class="headerlink" title="创建基础UI"></a>创建基础UI</h2><p>全屏提示框也是一个部件，跟一个普通的屏幕部件没什么不一样。所以我们准备使用基础的Scaffold部件创建它。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddEntryDialog</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  AddEntryDialogState createState() =&gt; <span class="keyword">new</span> AddEntryDialogState();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddEntryDialogState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">AddEntryDialog</span>&gt; </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Scaffold(</span><br><span class="line">      appBar: <span class="keyword">new</span> AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(<span class="string">'New entry'</span>),</span><br><span class="line">        actions: [</span><br><span class="line">          <span class="keyword">new</span> FlatButton(</span><br><span class="line">              onPressed: () &#123;</span><br><span class="line">                <span class="comment">//<span class="doctag">TODO:</span> Handle save</span></span><br><span class="line">              &#125;,</span><br><span class="line">              child: <span class="keyword">new</span> Text(<span class="string">'SAVE'</span>,</span><br><span class="line">                  style: Theme</span><br><span class="line">                      .of(context)</span><br><span class="line">                      .textTheme</span><br><span class="line">                      .subhead</span><br><span class="line">                      .copyWith(color: Colors.white))),</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">      body: <span class="keyword">new</span> Text(<span class="string">"Foo"</span>),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在actions属性中我们添加了一个FlatButton用于未来实现保存功能。</p>
+<p>我们在FlatButton上添加了一个样式让按钮看起来跟状态栏样式相匹配。</p>
+<h2 id="打开一个对话框"><a href="#打开一个对话框" class="headerlink" title="打开一个对话框"></a>打开一个对话框</h2><p>为了打开对话框，我们要用到Navigator类，这是一个Flutter的工具用于控制界面和布局的导航流。我们可以用Navigator的push把一个新的页面加入导航栈，用pop来关闭。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> _openAddEntryDialog() &#123;</span><br><span class="line">  Navigator.of(context).push(<span class="keyword">new</span> MaterialPageRoute&lt;<span class="built_in">Null</span>&gt;(</span><br><span class="line">      builder: (BuildContext context) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AddEntryDialog();</span><br><span class="line">      &#125;,</span><br><span class="line">    fullscreenDialog: <span class="keyword">true</span></span><br><span class="line">  ));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/asset/flutter_fullscreen_dialog_1.gif" alt="flutter_fullscreen_dialog_1"></p>
+<p>只有一个值得说明的是fullscreenDialog这个标记。设置它后页面左上角的默认的“返回箭头”标志会被替换为“关闭”。在iOS设备上这个页面的关闭动作同样会被右滑手势触发。</p>
+<p>如果对Flutter如何管理导航和对我这个例子中使用的MaterialPageRoute是什么感兴趣，我非常推荐读一下官方对于这个类的文档。文档关于Flutter的导航写得非常清晰而且提供了所有能了解Flutter的导航的信息。</p>
+<h2 id="获取一个结果"><a href="#获取一个结果" class="headerlink" title="获取一个结果"></a>获取一个结果</h2><p>全屏对话框常常用于添加/修改操作。考虑到这一点我们希望当用户点击SAVE（保存）时我们的对话框能返回一个数据。为了做到这样的效果我们需要用到更多的Navigation和Routing的功能。</p>
+<p>在前一个代码例子中我们使用了一个MaterialPageRoute<null>对象。Flutter的Routes（路由）被设计成能在它被推出（popped）导航栈后返回一个数据值。我们可以设定想要接收的返回数据的类型然后得到它，然后我们添加一些异步功能到我们的app中。</null></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Future _openAddEntryDialog() <span class="keyword">async</span> &#123;</span><br><span class="line">  WeightSave save = <span class="keyword">await</span> Navigator.of(context).push(<span class="keyword">new</span> MaterialPageRoute&lt;WeightSave&gt;(</span><br><span class="line">      builder: (BuildContext context) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AddEntryDialog();</span><br><span class="line">      &#125;,</span><br><span class="line">    fullscreenDialog: <span class="keyword">true</span></span><br><span class="line">  ));</span><br><span class="line">  <span class="keyword">if</span> (save != <span class="keyword">null</span>) &#123;</span><br><span class="line">    _addWeightSave(save);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Navigator的push方法返回一个Feature（应该是作者的错别字）对象，像约定（promise）一定会有一个对象返回一样。在我们的例子里，我们希望对话框返回一个WeightSave对象。为了得到这个对象我们添加了await关键字来让代码执行到此外先暂停，等待异步的push方法返回一个结果。这个结果会在pop方法被调用时返回。在此之后我们检查一下是否返回了数据并将数据加入列表中。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'dart:math'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'package:weight_tracker/model/WeightSave.dart'</span>;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddEntryDialog</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  AddEntryDialogState createState() =&gt; <span class="keyword">new</span> AddEntryDialogState();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddEntryDialogState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">AddEntryDialog</span>&gt; </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Scaffold(</span><br><span class="line">      appBar: <span class="keyword">new</span> AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(<span class="string">'New entry'</span>),</span><br><span class="line">        actions: [</span><br><span class="line">          <span class="keyword">new</span> FlatButton(</span><br><span class="line">              onPressed: () &#123;</span><br><span class="line">                Navigator</span><br><span class="line">                    .of(context)</span><br><span class="line">                    .pop(<span class="keyword">new</span> WeightSave(<span class="keyword">new</span> <span class="built_in">DateTime</span>.now(), <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>).toDouble()));</span><br><span class="line">              &#125;,</span><br><span class="line">              child: <span class="keyword">new</span> Text(<span class="string">'SAVE'</span>,</span><br><span class="line">                  style: Theme</span><br><span class="line">                      .of(context)</span><br><span class="line">                      .textTheme</span><br><span class="line">                      .subhead</span><br><span class="line">                      .copyWith(color: Colors.white))),</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">      body: <span class="keyword">new</span> Text(<span class="string">"Foo"</span>),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在对话框类中我们可以很简单的调用Navigator.pop方法并提供一个返回的对象。如果我们没有指定返回的值或者我们用了其他的方法关闭了这个界面（比如按返回键）默认的返回值将会是null。</p>
+<p>现在我们可以测试我们的对话框能否返回数据了。</p>
+<p><img src="/assets/flutter_fullscreen_dialog_2.gif" alt="flutter_fullscreen_dialog_2"></p>
+<h2 id="复杂的全屏对象框布局"><a href="#复杂的全屏对象框布局" class="headerlink" title="复杂的全屏对象框布局"></a>复杂的全屏对象框布局</h2><p>现在是时候摆脱Foo这些字了。</p>
+<p>我们主要的需求是让对话框能选一个日期和重量。我也可能需要添加一个备注。如果你对已经组装完成的控件感兴趣，在文章的底部有一个GitHub地址。</p>
+<h3 id="选择一个日期和时间"><a href="#选择一个日期和时间" class="headerlink" title="选择一个日期和时间"></a>选择一个日期和时间</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> ListTile(</span><br><span class="line">  leading: <span class="keyword">new</span> Icon(Icons.today, color: Colors.grey[<span class="number">500</span>]),</span><br><span class="line">  title: <span class="keyword">new</span> DateTimeItem(</span><br><span class="line">    dateTime: _dateTime,</span><br><span class="line">    onChanged: (dateTime) =&gt; setState(() =&gt; _dateTime = dateTime),</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DateTimeItem</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  DateTimeItem(&#123;Key key, <span class="built_in">DateTime</span> dateTime, <span class="meta">@required</span> <span class="keyword">this</span>.onChanged&#125;)</span><br><span class="line">      : <span class="keyword">assert</span>(onChanged != <span class="keyword">null</span>),</span><br><span class="line">        date = dateTime == <span class="keyword">null</span></span><br><span class="line">            ? <span class="keyword">new</span> <span class="built_in">DateTime</span>.now()</span><br><span class="line">            : <span class="keyword">new</span> <span class="built_in">DateTime</span>(dateTime.year, dateTime.month, dateTime.day),</span><br><span class="line">        time = dateTime == <span class="keyword">null</span></span><br><span class="line">            ? <span class="keyword">new</span> <span class="built_in">DateTime</span>.now()</span><br><span class="line">            : <span class="keyword">new</span> TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),</span><br><span class="line">        <span class="keyword">super</span>(key: key);</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">DateTime</span> date;</span><br><span class="line">  <span class="keyword">final</span> TimeOfDay time;</span><br><span class="line">  <span class="keyword">final</span> ValueChanged&lt;<span class="built_in">DateTime</span>&gt; onChanged;</span><br><span class="line"> </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Row(</span><br><span class="line">      children: &lt;Widget&gt;[</span><br><span class="line">        <span class="keyword">new</span> Expanded(</span><br><span class="line">          child: <span class="keyword">new</span> InkWell(</span><br><span class="line">            onTap: (() =&gt; _showDatePicker(context)),</span><br><span class="line">            child: <span class="keyword">new</span> Padding(</span><br><span class="line">                padding: <span class="keyword">new</span> EdgeInsets.symmetric(vertical: <span class="number">8.0</span>),</span><br><span class="line">                child: <span class="keyword">new</span> Text(<span class="keyword">new</span> DateFormat(<span class="string">'EEEE, MMMM d'</span>).format(date))),</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">        <span class="keyword">new</span> InkWell(</span><br><span class="line">          onTap: (() =&gt; _showTimePicker(context)),</span><br><span class="line">          child: <span class="keyword">new</span> Padding(</span><br><span class="line">              padding: <span class="keyword">new</span> EdgeInsets.symmetric(vertical: <span class="number">8.0</span>),</span><br><span class="line">              child: <span class="keyword">new</span> Text(<span class="string">'<span class="subst">$time<span class="string">')),</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">        ),</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">      ],</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    );</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  &#125;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string"> </span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  Future _showDatePicker(BuildContext context) async &#123;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    DateTime dateTimePicked = await showDatePicker(</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">        context: context,</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">        initialDate: date,</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">        firstDate: date.subtract(const Duration(days: 20000)),</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">        lastDate: new DateTime.now());</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string"> </span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    if (dateTimePicked != null) &#123;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">      onChanged(new DateTime(dateTimePicked.year, dateTimePicked.month,</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">          dateTimePicked.day, time.hour, time.minute));</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    &#125;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  &#125;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string"> </span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  Future _showTimePicker(BuildContext context) async &#123;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    TimeOfDay timeOfDay =</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">        await showTimePicker(context: context, initialTime: time);</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string"> </span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    if (timeOfDay != null) &#123;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">      onChanged(new DateTime(</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">          date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute));</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    &#125;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  &#125;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">&#125;</span></span></span></span><br></pre></td></tr></table></figure>
+<p><img src="/assets/flutter_fullscreen_dialog_3.gif" alt="flutter_fullscreen_dialog_3"></p>
+<p>DateTimeItem是一个我从Flutter的Gallery应用中借来的类，并且作了一些小改动。它一行中包容两个文字部件。第一个显示日期，当点击它的时候会弹出一个DatePicker（日期选择器）让用户选一个时间。同样的第二个文字部件显示的时间选择器让用户选择一天中的时间。</p>
+<p>当用户做了这些事后，我们使用从构造器传入的日期值简单的创建了一个新的DateTime对象并通过onChange方法传递它。然后父类调用setState方法从新的DateTime对象更新UI为用户所选的日期。</p>
+<h3 id="选择一个重量"><a href="#选择一个重量" class="headerlink" title="选择一个重量"></a>选择一个重量</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> ListTile(</span><br><span class="line">  leading: <span class="keyword">new</span> Image.asset(</span><br><span class="line">    <span class="string">"assets/scale-bathroom.png"</span>,</span><br><span class="line">    color: Colors.grey[<span class="number">500</span>],</span><br><span class="line">    height: <span class="number">24.0</span>,</span><br><span class="line">    width: <span class="number">24.0</span>,</span><br><span class="line">  ),</span><br><span class="line">  title: <span class="keyword">new</span> Text(</span><br><span class="line">    <span class="string">"<span class="subst">$_weight</span> kg"</span>,</span><br><span class="line">  ),</span><br><span class="line">  onTap: () =&gt; _showWeightPicker(context),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_showWeightPicker(BuildContext context) &#123;</span><br><span class="line">  showDialog(</span><br><span class="line">    context: context,</span><br><span class="line">    child: <span class="keyword">new</span> NumberPickerDialog.decimal(</span><br><span class="line">      minValue: <span class="number">1</span>,</span><br><span class="line">      maxValue: <span class="number">150</span>,</span><br><span class="line">      initialDoubleValue: _weight,</span><br><span class="line">      title: <span class="keyword">new</span> Text(<span class="string">"Enter your weight"</span>),</span><br><span class="line">    ),</span><br><span class="line">  ).then((value) &#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">      setState(() =&gt; _weight = value);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/assets/flutter_fullscreen_dialog_4.gif" alt="flutter_fullscreen_dialog_4"></p>
+<p>为了选择一个重量我决定使用简单的ListTile，点击它将打开一个NumberPickerDialog（如果你对NumberPicker感兴趣，你可以在<a href="https://pub.dartlang.org/packages/numberpicker" target="_blank" rel="noopener">这里</a>找到它）。当选择完重量后更新状态。我加进asset的头部图片是来自<a href="http://www.materialdesignicons.com/。" target="_blank" rel="noopener">http://www.materialdesignicons.com/。</a></p>
+<h3 id="添加一个备注"><a href="#添加一个备注" class="headerlink" title="添加一个备注"></a>添加一个备注</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line">  _textEditingController = <span class="keyword">new</span> TextEditingController(text: _note);</span><br><span class="line">  <span class="keyword">super</span>.initState();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> ListTile(</span><br><span class="line">  leading: <span class="keyword">new</span> Icon(Icons.speaker_notes, color: Colors.grey[<span class="number">500</span>]),</span><br><span class="line">  title: <span class="keyword">new</span> TextField(</span><br><span class="line">    decoration: <span class="keyword">new</span> InputDecoration(</span><br><span class="line">      hintText: <span class="string">'Optional note'</span>,</span><br><span class="line">    ),</span><br><span class="line">    controller: _textEditingController,</span><br><span class="line">    onChanged: (value) =&gt; _note = value,</span><br><span class="line">  ),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<p><img src="/assets/flutter_fullscreen_dialog_5.gif" alt="flutter_fullscreen_dialog_5"></p>
+<p>添加备注我决定使用简单的TextField。我的这个选择只是因为足够满足我的需求，不确定这是否是最好的选择。我们在initSate方法创建一个TextEditingController只是为了当_note存在的时候用这个值去构建TextField。此外，当TextField被修改时我们每次都会更新_note这个变量。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p><img src="/assets/flutter_fullscreen_dialog_6.gif" alt="flutter_fullscreen_dialog_6"></p>
+<p>有一个值得注意的是当用户没有保存数据就退出对话框时我没有创建一个确认对话框。我只是简单的觉得在我的例子中不需要这样。</p>
+<p>同样的我决定添加一个选项让重量条目能被添加或修改，这是一个非常容易的事。使用名称构造器（我介绍过两种使用WeightEntryDialog的方法）当我们提供了旧的数据时我们使用它显示对话框的内容，当然我们也可以创建一个新的。</p>
+<p>我希望你喜欢这篇文章。在Flutter中创建全屏对话框似乎非常简单，我很高兴Flutter创建了这样的工具。如果你有什么疑问或者你觉得你可以改进我的方案，请在下方留言，我非常乐意一起讨论。</p>
+<p>就这样，朋友们！</p>
+<p>你可以在<a href="https://github.com/MSzalek-Mobile/weight_tracker/tree/v0.2.1" target="_blank" rel="noopener">这里</a>找到整个项目。</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1/" title="Flutter ListView 教程 – 做一个体重追踪APP 1">
+                    <div class="prevTitle">Flutter ListView 教程 – 做一个体重追踪APP 1</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:gdtdpt@foxmail.com" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/gdtdpt" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建基础UI"><span class="toc-number">1.</span> <span class="toc-text">创建基础UI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打开一个对话框"><span class="toc-number">2.</span> <span class="toc-text">打开一个对话框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取一个结果"><span class="toc-number">3.</span> <span class="toc-text">获取一个结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复杂的全屏对象框布局"><span class="toc-number">4.</span> <span class="toc-text">复杂的全屏对象框布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#选择一个日期和时间"><span class="toc-number">4.1.</span> <span class="toc-text">选择一个日期和时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择一个重量"><span class="toc-number">4.2.</span> <span class="toc-text">选择一个重量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加一个备注"><span class="toc-number">4.3.</span> <span class="toc-text">添加一个备注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 2
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span><a class="archive-post-title" href="/2019/01/20/用Flutter创建一个全屏的对话框-体重跟踪APP-2/">用Flutter创建一个全屏的对话框 - 体重跟踪APP 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1/">Flutter ListView 教程 – 做一个体重追踪APP 1</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="flutter"><span class="iconfont-archer">&#xe606;</span>flutter</span>
+    
+        <span class="sidebar-tag-name" data-tags="dart"><span class="iconfont-archer">&#xe606;</span>dart</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Flutter"><span class="iconfont-archer">&#xe60a;</span>Flutter</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Richard Wong"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
