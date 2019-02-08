@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Richard Wong&#39;s Blog</title>
+    <title>Scrapy学习笔记——Scrapy概览 · Richard Wong&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,12 +203,23 @@
 </head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Richard Wong&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Scrapy学习笔记——Scrapy概览</a>
+            </div>
+    </div>
     
     <a class="home-link" href="/">Richard Wong's Blog</a>
 </header>
@@ -220,24 +231,76 @@
 
 
 
+
+height:50vh;
 ">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            Scrapy学习笔记——Scrapy概览
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="scrapy">scrapy</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">176</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/02/09</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -338,122 +401,53 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/09/Scrapy学习笔记——Scrapy概览/">
-            
-                <span>Scrapy学习笔记——Scrapy概览</span>
-        </a>
-        <div class="abstract-content">
-            Scrapy 开发中需要编程的内容Spider爬虫，负责提取页面中的数据，返回dict或Item子类实例。
-Item封装爬取到的数据，在Spider中返回。Item包含特殊的字段及方法便于其他Scrapy组件使用。
-Item Pipeline用于处理数据，在settings.py中定义需要处理数据的Item Pipeline和优先级，数据会以优先级从高到低依次传递给所有在settings.py中被定义的Item Pipeline，直至最后或数据被丢弃。
-Exporter用于导出数据，Scrapy内部实现了多个Exporters，每个Exporter实现一种导出的数据格式，自定义Expor...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/09</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="scrapy">scrapy</a>
-    
-</div>
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="Scrapy-开发中需要编程的内容"><a href="#Scrapy-开发中需要编程的内容" class="headerlink" title="Scrapy 开发中需要编程的内容"></a>Scrapy 开发中需要编程的内容</h2><h3 id="Spider"><a href="#Spider" class="headerlink" title="Spider"></a>Spider</h3><p>爬虫，负责提取页面中的数据，返回dict或Item子类实例。</p>
+<h3 id="Item"><a href="#Item" class="headerlink" title="Item"></a>Item</h3><p>封装爬取到的数据，在Spider中返回。Item包含特殊的字段及方法便于其他Scrapy组件使用。</p>
+<h3 id="Item-Pipeline"><a href="#Item-Pipeline" class="headerlink" title="Item Pipeline"></a>Item Pipeline</h3><p>用于处理数据，在settings.py中定义需要处理数据的Item Pipeline和优先级，数据会以优先级从高到低依次传递给所有在settings.py中被定义的Item Pipeline，直至最后或数据被丢弃。</p>
+<h3 id="Exporter"><a href="#Exporter" class="headerlink" title="Exporter"></a>Exporter</h3><p>用于导出数据，Scrapy内部实现了多个Exporters，每个Exporter实现一种导出的数据格式，自定义Exporter需要在settings.py中配置对应的格式。</p>
+<p>to be continue……</p>
+
     </article>
+    <!-- license  -->
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/01/20/用Flutter创建一个全屏的对话框-体重跟踪APP-2/">
-            
-                <span>用Flutter创建一个全屏的对话框 - 体重跟踪APP 2</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/flutter-fullscreendialog-tutorial-weighttracker-ii/" target="_blank" rel="noopener">CREATING FULL-SCREEN DIALOG IN FLUTTER – WEIGHTTRACKER 2</a></p>
-</blockquote>
-<blockquote>
-<p>此篇文章中的代码并不包括所有的代码改动，有部分细节没有给出，需要自行发现。</p>
-</blockquote>
-<blockquote>
-<p>英语水平有限，内容未必准确</p>
-</blockquote>
-<p>在这篇文章里我将一步步创建一个全屏的对话框（dialog）。像这样的全屏对话框比普通的对话框更适用于复杂的用户操作。你可以在<a href="https://material.io/guidelines/components/dialogs.html#dialogs-full-screen-dialogs" target="_blank" rel="noopener">Material Design的说明书</a>中了解到更多内容。好在Flutter框架提供了非常容易的方法创建和使用全屏提示框。你可以在Flutter的<a href="https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/full_screen_dialog_demo.dart" target="_blank" rel="noopener">Gallery app</a>中找到它。</p>
-<p>提供一个提示框是我的<a href="https://marcinszalek.pl/tag/weight-tracker/" target="_blank" rel="noopener">Weight Tracker</a>应用的一部分（一个简单的体重跟踪应用），所以开发内容将以此为基础和目标。</p>
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2019/02/09/Scrapy学习笔记——Scrapy概览/">https://www.huangyuexiang.com/2019/02/09/Scrapy学习笔记——Scrapy概览/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2019/02/09/Scrapy学习笔记——Scrapy概览/">February 9th 2019, 12:51:44 am</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2019/02/09/Scrapy学习笔记——Scrapy概览/">February 9th 2019, 1:05:07 am</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1/">
-            
-                <span>Flutter ListView 教程 – 做一个体重追踪APP 1</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/flutter-listview/" target="_blank" rel="noopener">FLUTTER LISTVIEW TUTORIAL – WEIGHTTRACKER 1</a></p>
-</blockquote>
-<blockquote>
-<p>英语水平有限，内容未必准确</p>
-</blockquote>
-<h2 id="在Flutter里创建一个ListView"><a href="#在Flutter里创建一个ListView" class="headerlink" title="在Flutter里创建一个ListView"></a>在Flutter里创建一个ListView</h2>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/17</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/01/20/用Flutter创建一个全屏的对话框-体重跟踪APP-2/" title="用Flutter创建一个全屏的对话框 - 体重跟踪APP 2">
+                    <div class="prevTitle">用Flutter创建一个全屏的对话框 - 体重跟踪APP 2</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -531,6 +525,24 @@ Exporter用于导出数据，Scrapy内部实现了多个Exporters，每个Export
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Scrapy-开发中需要编程的内容"><span class="toc-number">1.</span> <span class="toc-text">Scrapy 开发中需要编程的内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spider"><span class="toc-number">1.1.</span> <span class="toc-text">Spider</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Item"><span class="toc-number">1.2.</span> <span class="toc-text">Item</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Item-Pipeline"><span class="toc-number">1.3.</span> <span class="toc-text">Item Pipeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exporter"><span class="toc-number">1.4.</span> <span class="toc-text">Exporter</span></a></li></ol></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -682,6 +694,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
