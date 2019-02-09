@@ -421,7 +421,7 @@ height:50vh;
 <p>我们在FlatButton上添加了一个样式让按钮看起来跟状态栏样式相匹配。</p>
 <h2 id="打开一个对话框"><a href="#打开一个对话框" class="headerlink" title="打开一个对话框"></a>打开一个对话框</h2><p>为了打开对话框，我们要用到Navigator类，这是一个Flutter的工具用于控制界面和布局的导航流。我们可以用Navigator的push把一个新的页面加入导航栈，用pop来关闭。</p>
 <figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> _openAddEntryDialog() &#123;</span><br><span class="line">  Navigator.of(context).push(<span class="keyword">new</span> MaterialPageRoute&lt;<span class="built_in">Null</span>&gt;(</span><br><span class="line">      builder: (BuildContext context) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AddEntryDialog();</span><br><span class="line">      &#125;,</span><br><span class="line">    fullscreenDialog: <span class="keyword">true</span></span><br><span class="line">  ));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/asset/flutter_fullscreen_dialog_1.gif" alt="flutter_fullscreen_dialog_1"></p>
+<p><img src="/assets/flutter_fullscreen_dialog_1.gif" alt="flutter_fullscreen_dialog_1"></p>
 <p>只有一个值得说明的是fullscreenDialog这个标记。设置它后页面左上角的默认的“返回箭头”标志会被替换为“关闭”。在iOS设备上这个页面的关闭动作同样会被右滑手势触发。</p>
 <p>如果对Flutter如何管理导航和对我这个例子中使用的MaterialPageRoute是什么感兴趣，我非常推荐读一下官方对于这个类的文档。文档关于Flutter的导航写得非常清晰而且提供了所有能了解Flutter的导航的信息。</p>
 <h2 id="获取一个结果"><a href="#获取一个结果" class="headerlink" title="获取一个结果"></a>获取一个结果</h2><p>全屏对话框常常用于添加/修改操作。考虑到这一点我们希望当用户点击SAVE（保存）时我们的对话框能返回一个数据。为了做到这样的效果我们需要用到更多的Navigation和Routing的功能。</p>
@@ -623,9 +623,18 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 3
+        Total : 4
         </div>
         <!-- search  -->
         
@@ -638,6 +647,11 @@ top:50vh;
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/09</span><a class="archive-post-title" href="/2019/02/09/Flutter中的Firebase数据库——体重跟踪APP-3/">Flutter中的Firebase数据库——体重跟踪APP 3</a>
+        </li>
     
     
         <li class="archive-post-item">
