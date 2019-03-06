@@ -78,6 +78,8 @@
     <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
     
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -201,10 +203,8 @@
 </head>
 
     
-        <body class="home-body">
     
-    
-<header class="header index-header">
+<header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
@@ -220,34 +220,21 @@
 
 
 
-
-height:50vh;
 ">
     
     <!-- 主页  -->
-    
-    
-    <!-- 文章页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Richard Wong's Blog
-            <!-- 文章页  -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
-            
-            
-                Foot step for my learning
-            
-            <!-- 文章页  -->
             
         </p>
         <!-- 文章页meta -->
@@ -395,276 +382,10 @@ height:50vh;
         </div>
     </article>
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/24/在Flutter-Firebase应用中使用Redux——体重跟踪4/">
-            
-                <span>在Flutter Firebase应用中使用Redux——体重跟踪4</span>
-        </a>
-        <div class="abstract-content">
-            
-本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接REDUXING FLUTTER FIREBASE APP – WEIGHTTRACKER 4
-
-
-这篇文章中所使用的Firebase_auth任何版本在我的机器上都无法编译通过，考虑到上一篇对环境的要求非常严苛，以及此篇我无法正常运行应用，所以这个体重跟踪应用的系列暂时不再继续翻译
-
-
-英语水平有限，内容未必准确
-
-在这篇文章中我将展示怎样把flutter_redux库添加到我现有的与Firebase有连接的应用中。这里展示的开发内容是我的体重追踪应用(追踪体重的简单应用)的一部分，并且只有这些内容。
-
-提示： 以下...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/24</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/09/Flutter中的Firebase数据库——体重跟踪APP-3/">
-            
-                <span>Flutter中的Firebase数据库——体重跟踪APP 3</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/firebase-database-flutter-weighttracker/" target="_blank" rel="noopener">FIREBASE DATABASE IN FLUTTER – WEIGHTTRACKER 3</a></p>
-</blockquote>
-<blockquote>
-<p>此篇文章中的代码并不包括所有的代码改动，有部分细节没有给出，需要自行发现。<br>此篇跟随学习难度很大，firebase-database库的使用方式已经与文中不太一样，具体使用方法可参考<a href="https://github.com/flutter/plugins/tree/master/packages/firebase_database/example" target="_blank" rel="noopener">这里</a><br>起始代码已经与上篇结尾有所不同，详细代码在文末<br>需要能打开firebase控制台的环境</p>
-</blockquote>
-<blockquote>
-<p>英语水平有限，内容未必准确</p>
-</blockquote>
-<p>在这篇文章中我们要把Firebase数据库添加进一个Flutter应用。将要开发的是我的体重跟踪应用(Weight Tracker app)(一个跟踪体重的简单应用)的一个部分，所以开发的内容将以此应用为基础，并以此为目的。</p>
-<p>让我们开始吧！</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/09</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/09/Scrapy学习笔记——Scrapy概览/">
-            
-                <span>Scrapy学习笔记——Scrapy概览</span>
-        </a>
-        <div class="abstract-content">
-            Scrapy 开发中需要编程的内容Spider爬虫，负责提取页面中的数据，返回dict或Item子类实例。
-Item封装爬取到的数据，在Spider中返回。Item包含特殊的字段及方法便于其他Scrapy组件使用。
-Item Pipeline用于处理数据，在settings.py中定义需要处理数据的Item Pipeline和优先级，数据会以优先级从高到低依次传递给所有在settings.py中被定义的Item Pipeline，直至最后或数据被丢弃。
-Exporter用于导出数据，Scrapy内部实现了多个Exporters，每个Exporter实现一种导出的数据格式，自定义Expor...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/09</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="scrapy">scrapy</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/01/20/用Flutter创建一个全屏的对话框-体重跟踪APP-2/">
-            
-                <span>用Flutter创建一个全屏的对话框 - 体重跟踪APP 2</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/flutter-fullscreendialog-tutorial-weighttracker-ii/" target="_blank" rel="noopener">CREATING FULL-SCREEN DIALOG IN FLUTTER – WEIGHTTRACKER 2</a></p>
-</blockquote>
-<blockquote>
-<p>此篇文章中的代码并不包括所有的代码改动，有部分细节没有给出，需要自行发现。</p>
-</blockquote>
-<blockquote>
-<p>英语水平有限，内容未必准确</p>
-</blockquote>
-<p>在这篇文章里我将一步步创建一个全屏的对话框（dialog）。像这样的全屏对话框比普通的对话框更适用于复杂的用户操作。你可以在<a href="https://material.io/guidelines/components/dialogs.html#dialogs-full-screen-dialogs" target="_blank" rel="noopener">Material Design的说明书</a>中了解到更多内容。好在Flutter框架提供了非常容易的方法创建和使用全屏提示框。你可以在Flutter的<a href="https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/full_screen_dialog_demo.dart" target="_blank" rel="noopener">Gallery app</a>中找到它。</p>
-<p>提供一个提示框是我的<a href="https://marcinszalek.pl/tag/weight-tracker/" target="_blank" rel="noopener">Weight Tracker</a>应用的一部分（一个简单的体重跟踪应用），所以开发内容将以此为基础和目标。</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1/">
-            
-                <span>Flutter ListView 教程 – 做一个体重追踪APP 1</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/flutter-listview/" target="_blank" rel="noopener">FLUTTER LISTVIEW TUTORIAL – WEIGHTTRACKER 1</a></p>
-</blockquote>
-<blockquote>
-<p>英语水平有限，内容未必准确</p>
-</blockquote>
-<h2 id="在Flutter里创建一个ListView"><a href="#在Flutter里创建一个ListView" class="headerlink" title="在Flutter里创建一个ListView"></a>在Flutter里创建一个ListView</h2>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/17</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
     <!-- paginator  -->
     
 </main>
             <!-- profile -->
-            
-            <div class="profile">
-    <img class="profile-avatar" alt="avatar" src="/avatar/avatar.png">
-    <div class="profile-name">Richard</div>
-    
-    <div class="profile-signature">
-        stay hungry, stay foolish
-    </div>
-    
-    
-    <div class="profile-social">
-        
-    
-        
-            
-                <a href="mailto:gdtdpt@foxmail.com" class="iconfont-archer email" title="email"></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/gdtdpt" class="iconfont-archer github" target="_blank" title="github"></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-    </div>
-    
-    
-    
-        <div class="about-me">
-            <a href="/about">ABOUT ME</a>
-        </div>
-    
-</div>
             
         </div>
         <footer class="footer footer-unloaded">
