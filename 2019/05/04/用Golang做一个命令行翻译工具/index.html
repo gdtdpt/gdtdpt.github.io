@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Richard Wong">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Richard Wong">
+    
+    <meta name="keywords" content="Richard,Richard Wong,Blog">
+    
+    <meta name="description" content="">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>用Golang做一个命令行翻译工具 · Richard Wong&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin="">
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin="">
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Richard Wong&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">用Golang做一个命令行翻译工具</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Richard Wong's Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            用Golang做一个命令行翻译工具
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="golang">golang</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.3k</span>阅读时长: <span class="post-count reading-time">6 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/05/04</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>用golang写一个命令行的翻译工具，在命令行输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fanyi hello</span><br></pre></td></tr></table></figure>
+<p>输出以下结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hello [həˈləʊ]</span><br><span class="line"></span><br><span class="line">- 你好</span><br><span class="line"></span><br><span class="line">1. Hello Android</span><br><span class="line">   创建,创立,建立</span><br><span class="line">2. Hello Neighbor</span><br><span class="line">   你好邻居,你好</span><br><span class="line">3. Hello English</span><br><span class="line">   新纪元小学英语,学英语,律动欢唱学英语</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="接收参数"><a href="#接收参数" class="headerlink" title="接收参数"></a>接收参数</h2><p>创建目录和main.go，接收命令行参数</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    args := os.Args</span><br><span class="line">    <span class="comment">// 切片第一项为命令本身，所以[1:]为我们需要翻译的内容</span></span><br><span class="line">    words := args[<span class="number">1</span>:]</span><br><span class="line">    <span class="comment">// 如果没有输入则退出</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(words) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">"words: "</span>, words)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="找一个翻译API"><a href="#找一个翻译API" class="headerlink" title="找一个翻译API"></a>找一个翻译API</h2><p>我这里用的是有道的API</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://fanyi.youdao.com/openapi.do?keyfrom=node-fanyi&amp;key=&lt;your key here&gt;&amp;type=data&amp;doctype=json&amp;version=1.1&amp;q=hello</span><br></pre></td></tr></table></figure>
+<h2 id="创建翻译包"><a href="#创建翻译包" class="headerlink" title="创建翻译包"></a>创建翻译包</h2><p>我把具体的翻译逻辑放到一个叫translate的包中，基于有道翻译的逻辑我写在youdao.go文件中</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// translate/youdao.go</span></span><br><span class="line"><span class="keyword">package</span> translate</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Youdao</span><span class="params">(words <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">""</span>, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">    <span class="string">"log"</span></span><br><span class="line">    <span class="string">"strings"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"./translate"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    args := os.Args</span><br><span class="line">    <span class="comment">// 切片第一项为命令本身，所以[1:]为我们需要翻译的内容，转换成字符串</span></span><br><span class="line">    words := strings.Join(args[<span class="number">1</span>:], <span class="string">" "</span>)</span><br><span class="line">    <span class="comment">// 如果没有输入则退出</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(words) == <span class="number">0</span> &#123;</span><br><span class="line">        log.Fatal(<span class="string">"empty params"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    translate, err := translate.Youdao(words)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(translate)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="向有道API发起请求"><a href="#向有道API发起请求" class="headerlink" title="向有道API发起请求"></a>向有道API发起请求</h2><p>使用golang内置的net/http包发起http请求</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// translate/youdao.go</span></span><br><span class="line"><span class="keyword">package</span> translate</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"strings"</span></span><br><span class="line">    <span class="string">"net/http"</span></span><br><span class="line">    <span class="string">"ioutil"</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">// 这里我使用$&#123;word&#125;占位符</span></span><br><span class="line"><span class="keyword">const</span> youdaoApi = <span class="string">"http://fanyi.youdao.com/openapi.do?keyfrom=node-fanyi&amp;key=&lt;your key here&gt;&amp;type=data&amp;doctype=json&amp;version=1.1&amp;q=$&#123;word&#125;"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Youdao</span><span class="params">(words <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">"youdao: "</span>, words)</span><br><span class="line">    <span class="comment">// 替换字符串</span></span><br><span class="line">    url := strings.replace(youdaoApi, <span class="string">"$&#123;word&#125;"</span>, words, <span class="number">1</span>)</span><br><span class="line">    res, err := http.Get(url)</span><br><span class="line">    <span class="comment">// 有错误返回错误</span></span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 使用golang的defer机制确保资源正确关闭</span></span><br><span class="line">    <span class="keyword">defer</span> res.Body.Close()</span><br><span class="line">    <span class="comment">// res.Body是一个io.ReadCloser接口</span></span><br><span class="line">    <span class="comment">// 使用ioutil.ReadAll将Body中的数据读出来，结果是[]byte</span></span><br><span class="line">    body, err := ioutil.ReadAll(res.Body)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 输出是一段[]byte数据，不可读</span></span><br><span class="line">    fmt.Println(body)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="解析json数据"><a href="#解析json数据" class="headerlink" title="解析json数据"></a>解析json数据</h2><p>golang已经内置了用于解析json数据的工具，我们只需要按照json数据的格式创建对应的struct。</p>
+<p>有道API返回的json数据格式如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"translation"</span>: [<span class="string">"你好"</span>],</span><br><span class="line">	<span class="attr">"basic"</span>: &#123;</span><br><span class="line">		<span class="attr">"us-phonetic"</span>: <span class="string">"helˈō"</span>,</span><br><span class="line">		<span class="attr">"phonetic"</span>: <span class="string">"həˈləʊ"</span>,</span><br><span class="line">		<span class="attr">"uk-phonetic"</span>: <span class="string">"həˈləʊ"</span>,</span><br><span class="line">		<span class="attr">"explains"</span>: [<span class="string">"n. 表示问候， 惊奇或唤起注意时的用语"</span>, <span class="string">"int. 喂；哈罗"</span>, <span class="string">"n. (Hello)人名；(法)埃洛"</span>]</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">"query"</span>: <span class="string">"hello"</span>,</span><br><span class="line">	<span class="attr">"errorCode"</span>: <span class="number">0</span>,</span><br><span class="line">	<span class="attr">"web"</span>: [&#123;</span><br><span class="line">		<span class="attr">"value"</span>: [<span class="string">"创建"</span>, <span class="string">"创立"</span>, <span class="string">"建立"</span>],</span><br><span class="line">		<span class="attr">"key"</span>: <span class="string">"Hello Android"</span></span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		<span class="attr">"value"</span>: [<span class="string">"你好邻居"</span>, <span class="string">"你好"</span>],</span><br><span class="line">		<span class="attr">"key"</span>: <span class="string">"Hello Neighbor"</span></span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		<span class="attr">"value"</span>: [<span class="string">"新纪元小学英语"</span>, <span class="string">"学英语"</span>, <span class="string">"律动欢唱学英语"</span>],</span><br><span class="line">		<span class="attr">"key"</span>: <span class="string">"Hello English"</span></span><br><span class="line">	&#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在youdao.go中创建对应的struct</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// YoudaoData 有道返回的json数据</span></span><br><span class="line"><span class="keyword">type</span> YoudaoData <span class="keyword">struct</span> &#123;</span><br><span class="line">	Translation []<span class="keyword">string</span>        <span class="string">`json:"translation"`</span></span><br><span class="line">	Basic       YoudaoBasic     <span class="string">`json:"basic"`</span></span><br><span class="line">	Query       <span class="keyword">string</span>          <span class="string">`json:"query"`</span></span><br><span class="line">	ErrorCode   <span class="keyword">string</span>          <span class="string">`json:"errorCode"`</span></span><br><span class="line">	Web         []YoudaoWebItem <span class="string">`json:"web"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// YoudaoBasic json数据中的basic</span></span><br><span class="line"><span class="keyword">type</span> YoudaoBasic <span class="keyword">struct</span> &#123;</span><br><span class="line">	UsPhonetic <span class="keyword">string</span>   <span class="string">`json:"us-phonetic"`</span></span><br><span class="line">	Phonetic   <span class="keyword">string</span>   <span class="string">`json:"phonetic"`</span></span><br><span class="line">	UkPhonetic <span class="keyword">string</span>   <span class="string">`json:"uk-phonetic"`</span></span><br><span class="line">	Explains   []<span class="keyword">string</span> <span class="string">`json:"explains"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// YoudaoWebItem json数据中的web字段</span></span><br><span class="line"><span class="keyword">type</span> YoudaoWebItem <span class="keyword">struct</span> &#123;</span><br><span class="line">	Value []<span class="keyword">string</span> <span class="string">`json:"value"`</span></span><br><span class="line">	Key   <span class="keyword">string</span>   <span class="string">`json:"key"`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改<code>Youdao(words string)</code></p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Youdao</span><span class="params">(words <span class="keyword">string</span>)</span> <span class="params">(YoudaoData, error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> jsonData YoudaoData</span><br><span class="line">    <span class="comment">// 替换字符串</span></span><br><span class="line">    url := strings.replace(youdaoApi, <span class="string">"$&#123;word&#125;"</span>, words, <span class="number">1</span>)</span><br><span class="line">    res, err := http.Get(url)</span><br><span class="line">    <span class="comment">// 有错误返回错误</span></span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> jsonData, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 使用golang的defer机制确保资源正确关闭</span></span><br><span class="line">    <span class="keyword">defer</span> res.Body.Close()</span><br><span class="line">    <span class="comment">// res.Body是一个io.ReadCloser接口</span></span><br><span class="line">    <span class="comment">// 使用ioutil.ReadAll将Body中的数据读出来，结果是[]byte</span></span><br><span class="line">    body, err := ioutil.ReadAll(res.Body)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> jsonData, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 使用json包解析json数据</span></span><br><span class="line">    json.Unmarshal(body, &amp;jsonData)</span><br><span class="line">    <span class="keyword">return</span> jsonData, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在可以在命令行看到结果了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;[你好] &#123;helˈō həˈləʊ həˈləʊ [n. 表示问候， 惊奇或唤起注意时的用语 int. 喂；哈罗 n. (Hello)人名；(法)埃洛]&#125; hello  [&#123;[创建 创立 建立] Hello Android&#125; &#123;[你好邻居 你好] Hello Neighbor&#125; &#123;[新纪元小学英语 学英语 律动欢唱学英语] Hello English&#125;]&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的结果不是我们想要的，我们希望在<code>fmt.Println(translate)</code>是数据能自动带上格式。</p>
+<h2 id="数据格式化输出"><a href="#数据格式化输出" class="headerlink" title="数据格式化输出"></a>数据格式化输出</h2><p>就像Java里的toString方法一样，我们只需要让struct实现String()接口就可以修改输出内容</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(data YoudaoData)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	phonetic := fmt.Sprintf(<span class="string">"%s [%s]\n"</span>, data.Query, data.Basic.Phonetic)</span><br><span class="line">	<span class="keyword">var</span> explains <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">for</span> _, val := <span class="keyword">range</span> data.Translation &#123;</span><br><span class="line">		explains += fmt.Sprintf(<span class="string">"- %s\n"</span>, val)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> examples <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">for</span> index, item := <span class="keyword">range</span> data.Web &#123;</span><br><span class="line">		examples += fmt.Sprintf(<span class="string">"%d. %s\n   %s\n"</span>, index+<span class="number">1</span>, item.Key, strings.Join(item.Value, <span class="string">","</span>))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">`</span></span><br><span class="line"><span class="string">%s</span></span><br><span class="line"><span class="string">%s</span></span><br><span class="line"><span class="string">%s</span></span><br><span class="line"><span class="string">	`</span>, phonetic, explains, examples)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再次运行<code>go run main.go hello</code>，输出为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hello [həˈləʊ]</span><br><span class="line"></span><br><span class="line">- 你好</span><br><span class="line"></span><br><span class="line">1. Hello Android</span><br><span class="line">   创建,创立,建立</span><br><span class="line">2. Hello Neighbor</span><br><span class="line">   你好邻居,你好</span><br><span class="line">3. Hello English</span><br><span class="line">   新纪元小学英语,学英语,律动欢唱学英语</span><br></pre></td></tr></table></figure>
+<p>感觉目的达到了。</p>
+<h2 id="Bug"><a href="#Bug" class="headerlink" title="Bug"></a>Bug</h2><p>查看有道的API文档，发现这个API是智能翻译，意思是输入什么语言都可以。<br>我们试试<code>go run main.go 你好</code>，输出了乱码加空白</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ä½ å¥½ []</span><br></pre></td></tr></table></figure>
+<p>既然我们是调用的http的get请求，那么在传递特殊字符时应该先encode一下，修改<code>Youdao(words string)</code>方法</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Youdao</span><span class="params">(words <span class="keyword">string</span>)</span> <span class="params">(YoudaoData, error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> jsonData YoudaoData</span><br><span class="line">    url := strings.Replace(youdao, <span class="string">"$&#123;word&#125;"</span>, url.QueryEscape(words), <span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再试一次<code>go run main.go 你好</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">你好 []</span><br><span class="line"></span><br><span class="line">- hello</span><br><span class="line"></span><br><span class="line">1. 老师你好</span><br><span class="line">   Teacher Kim Bong-du,My Teacher Mr Kim,SALVE MAGISTER</span><br><span class="line">2. 你好嘢</span><br><span class="line">   Her Fatal Ways,HIS FATAL WAYS,wvkj</span><br><span class="line">3. 你好总统</span><br><span class="line">   Alo Presidente</span><br></pre></td></tr></table></figure>
+<p>感觉好像可以了。</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2019/05/04/用Golang做一个命令行翻译工具/">https://www.huangyuexiang.com/2019/05/04/用Golang做一个命令行翻译工具/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2019/05/04/用Golang做一个命令行翻译工具/">May 4th 2019, 2:56:58 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2019/05/04/用Golang做一个命令行翻译工具/">May 4th 2019, 3:49:18 pm</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/05/01/Golang学习笔记——定义函数类型实现接口/" title="Golang学习笔记——定义函数类型实现接口">
+                    <div class="prevTitle">Golang学习笔记——定义函数类型实现接口</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:gdtdpt@foxmail.com" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/gdtdpt" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接收参数"><span class="toc-number">2.</span> <span class="toc-text">接收参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#找一个翻译API"><span class="toc-number">3.</span> <span class="toc-text">找一个翻译API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建翻译包"><span class="toc-number">4.</span> <span class="toc-text">创建翻译包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#向有道API发起请求"><span class="toc-number">5.</span> <span class="toc-text">向有道API发起请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析json数据"><span class="toc-number">6.</span> <span class="toc-text">解析json数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据格式化输出"><span class="toc-number">7.</span> <span class="toc-text">数据格式化输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bug"><span class="toc-number">8.</span> <span class="toc-text">Bug</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 10
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/04</span><a class="archive-post-title" href="/2019/05/04/用Golang做一个命令行翻译工具/">用Golang做一个命令行翻译工具</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span><a class="archive-post-title" href="/2019/05/01/Golang学习笔记——定义函数类型实现接口/">Golang学习笔记——定义函数类型实现接口</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/27</span><a class="archive-post-title" href="/2019/04/27/理解Angular中的Resolver/">理解Angular中的Resolver</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/07</span><a class="archive-post-title" href="/2019/03/07/无限动态列表/">无限动态列表</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/06</span><a class="archive-post-title" href="/2019/03/06/动态浮动按钮/">动态浮动按钮</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/24</span><a class="archive-post-title" href="/2019/02/24/在Flutter-Firebase应用中使用Redux——体重跟踪4/">在Flutter Firebase应用中使用Redux——体重跟踪4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/09</span><a class="archive-post-title" href="/2019/02/09/Flutter中的Firebase数据库——体重跟踪APP-3/">Flutter中的Firebase数据库——体重跟踪APP 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/09</span><a class="archive-post-title" href="/2019/02/09/Scrapy学习笔记——Scrapy概览/">Scrapy学习笔记——Scrapy概览</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span><a class="archive-post-title" href="/2019/01/20/用Flutter创建一个全屏的对话框-体重跟踪APP-2/">用Flutter创建一个全屏的对话框 - 体重跟踪APP 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1/">Flutter ListView 教程 – 做一个体重追踪APP 1</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="flutter"><span class="iconfont-archer">&#xe606;</span>flutter</span>
+    
+        <span class="sidebar-tag-name" data-tags="dart"><span class="iconfont-archer">&#xe606;</span>dart</span>
+    
+        <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="scrapy"><span class="iconfont-archer">&#xe606;</span>scrapy</span>
+    
+        <span class="sidebar-tag-name" data-tags="angular"><span class="iconfont-archer">&#xe606;</span>angular</span>
+    
+        <span class="sidebar-tag-name" data-tags="typescript"><span class="iconfont-archer">&#xe606;</span>typescript</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Flutter"><span class="iconfont-archer">&#xe60a;</span>Flutter</span>
+    
+        <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
+    
+        <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
+    
+        <span class="sidebar-category-name" data-categories="Angular"><span class="iconfont-archer">&#xe60a;</span>Angular</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Richard Wong"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
