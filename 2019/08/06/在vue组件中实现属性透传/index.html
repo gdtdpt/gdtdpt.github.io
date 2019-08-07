@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Richard Wong&#39;s Blog</title>
+    <title>在vue组件中实现属性透传 · Richard Wong&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,12 +203,23 @@
 </head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Richard Wong&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">在vue组件中实现属性透传</a>
+            </div>
+    </div>
     
     <a class="home-link" href="/">Richard Wong's Blog</a>
 </header>
@@ -220,24 +231,76 @@
 
 
 
+
+height:50vh;
 ">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            在vue组件中实现属性透传
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="vue">vue</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="javascript">javascript</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">748</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/08/06</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -338,127 +401,61 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/24/在Flutter-Firebase应用中使用Redux——体重跟踪4/">
-            
-                <span>在Flutter Firebase应用中使用Redux——体重跟踪4</span>
-        </a>
-        <div class="abstract-content">
-            
-本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接REDUXING FLUTTER FIREBASE APP – WEIGHTTRACKER 4
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>在React中属性透传是一件很随意的事，只要在某个子组件上写上<code>{...this.props}</code>就能简单的实现属性透传，这对封装第三方组件非常友好。</p>
+<p>在Angular中没有尝试过，但是想了一下似乎可以通过<code>ViewChild</code>和继承被扩展类来实现属性透传。</p>
+<p>最近在Vue项目中遇到了一个类似的需求，但是百度了一会似乎没什么文章说这个问题，虽然有关vue的HOC相关文章不少，但是我遇到的需求和HOC还有点不太一样。</p>
+<p>需求是使用iView组件库，其中当使用<code>Upload</code>组件时必须在请求的body中传递固定的参数</p>
+<a id="more"></a>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;Upload :data=<span class="string">"body"</span>/&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">export default &#123;</span></span><br><span class="line"><span class="regexp">    data() &#123;</span></span><br><span class="line"><span class="regexp">        return &#123;</span></span><br><span class="line"><span class="regexp">            body: &#123;</span></span><br><span class="line"><span class="regexp">                'system': 'mySystem'</span></span><br><span class="line"><span class="regexp">            &#125;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
+<p>像上面这样的代码不想每次都写<code>:data=&quot;body&quot;</code>这样的代码，封装的想法还是有的。比如可以把<code>data</code>封闭到mixin里，但是<code>Upload</code>组件每次还要记得写<code>:data=&quot;body&quot;</code>，也要记得写mixins才不会出错，最好是能把<code>Upload</code>包装成自己的组件，然后组件内部定义好<code>Upload</code>需要的默认的属性。</p>
+<p>这样还不够，因为只是单纯的对<code>Upload</code>进行封装，<code>Upload</code>组件上原有的属性和事件最好也能直接使用。</p>
+<p>这里就需要进行属性透传。假设我要把<code>Upload</code>封装到<code>MyUpload</code>组件中，<code>MyUpload</code>组件的属性和事件至少应该与<code>Upload</code>组件上的属性和事件一一对应，如果名字一样就更好了，这样说明文档都省了，直接看iView的就行了。</p>
+<p>关于这个想法我咨询了很有经验的同事，同事跟我说需要用vue的方法写JXS，我以为是一种类似React里的JXS那样写，只是可能步骤上有些出入，业余时间研究了几天感觉不太对。后来渐渐看到HOC相关的内容，感觉应该差不多是这个。</p>
+<p>但是在HOC的文章中，作者都会定义一个方法，接收一个组件，返回一个被扩展的组件，而我需要的仅仅只是一个扩展好的组件，能直接将这个组件注册到全局中或者在局部被父组件引用，不需要再传入返回这些操作。但是感觉方向上和HOC是一致的，于是开始尝试。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; Upload &#125; <span class="keyword">from</span> <span class="string">'iview'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    name: <span class="string">'MyUpload'</span>,</span><br><span class="line">    props: Upload.props,</span><br><span class="line">    render(h) &#123;</span><br><span class="line">        <span class="keyword">return</span> h(Upload, &#123;</span><br><span class="line">            on: <span class="keyword">this</span>.$listeners,</span><br><span class="line">            attrs: <span class="keyword">this</span>.$attrs,</span><br><span class="line">            props: &#123;</span><br><span class="line">                ...this.props,</span><br><span class="line">                data: <span class="keyword">this</span>.data || &#123;</span><br><span class="line">                    <span class="string">'system'</span>: <span class="string">'mySystem'</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            scopedSlots: <span class="keyword">this</span>.$scopedSlot</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>h</code>函数就相当于<code>createElement</code>函数，官网有详细介绍。这样创建的<code>MyUpload</code>组件其实就是把<code>Upload</code>组件包装了一下，<code>Upload</code>原本的属性事件都能直接用在<code>MyUpload</code>上，并且为自己定制了<code>data</code>的默认属性。</p>
 
-
-这篇文章中所使用的Firebase_auth任何版本在我的机器上都无法编译通过，考虑到上一篇对环境的要求非常严苛，以及此篇我无法正常运行应用，所以这个体重跟踪应用的系列暂时不再继续翻译
-
-
-英语水平有限，内容未必准确
-
-在这篇文章中我将展示怎样把flutter_redux库添加到我现有的与Firebase有连接的应用中。这里展示的开发内容是我的体重追踪应用(追踪体重的简单应用)的一部分，并且只有这些内容。
-
-提示： 以下...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/24</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
     </article>
+    <!-- license  -->
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/09/Flutter中的Firebase数据库——体重跟踪APP-3/">
-            
-                <span>Flutter中的Firebase数据库——体重跟踪APP 3</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/firebase-database-flutter-weighttracker/" target="_blank" rel="noopener">FIREBASE DATABASE IN FLUTTER – WEIGHTTRACKER 3</a></p>
-</blockquote>
-<blockquote>
-<p>此篇文章中的代码并不包括所有的代码改动，有部分细节没有给出，需要自行发现。<br>此篇跟随学习难度很大，firebase-database库的使用方式已经与文中不太一样，具体使用方法可参考<a href="https://github.com/flutter/plugins/tree/master/packages/firebase_database/example" target="_blank" rel="noopener">这里</a><br>起始代码已经与上篇结尾有所不同，详细代码在文末<br>需要能打开firebase控制台的环境</p>
-</blockquote>
-<blockquote>
-<p>英语水平有限，内容未必准确</p>
-</blockquote>
-<p>在这篇文章中我们要把Firebase数据库添加进一个Flutter应用。将要开发的是我的体重跟踪应用(Weight Tracker app)(一个跟踪体重的简单应用)的一个部分，所以开发的内容将以此应用为基础，并以此为目的。</p>
-<p>让我们开始吧！</p>
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/">https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/">August 6th 2019, 11:40:07 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/">August 7th 2019, 8:39:33 am</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/09</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/09/Scrapy学习笔记——Scrapy概览/">
-            
-                <span>Scrapy学习笔记——Scrapy概览</span>
-        </a>
-        <div class="abstract-content">
-            Scrapy 开发中需要编程的内容Spider爬虫，负责提取页面中的数据，返回dict或Item子类实例。
-Item封装爬取到的数据，在Spider中返回。Item包含特殊的字段及方法便于其他Scrapy组件使用。
-Item Pipeline用于处理数据，在settings.py中定义需要处理数据的Item Pipeline和优先级，数据会以优先级从高到低依次传递给所有在settings.py中被定义的Item Pipeline，直至最后或数据被丢弃。
-Exporter用于导出数据，Scrapy内部实现了多个Exporters，每个Exporter实现一种导出的数据格式，自定义Expor...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/09</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="scrapy">scrapy</a>
-    
-</div>
-            
-        </div>
-    </article>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/05/05/Golang中的单例模式/" title="Golang中的单例模式">
+                    <div class="prevTitle">Golang中的单例模式</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -536,6 +533,24 @@ Exporter用于导出数据，Scrapy内部实现了多个Exporters，每个Export
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -861,6 +876,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
