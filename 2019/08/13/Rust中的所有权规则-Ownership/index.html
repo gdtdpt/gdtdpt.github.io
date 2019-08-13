@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Richard Wong">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Richard Wong">
+    
+    <meta name="keywords" content="Richard,Richard Wong,Blog">
+    
+    <meta name="description" content="">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Rust中的所有权规则(Ownership) · Richard Wong&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin="">
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin="">
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Richard Wong&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Rust中的所有权规则(Ownership)</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Richard Wong's Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Rust中的所有权规则(Ownership)
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="rust">rust</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.6k</span>阅读时长: <span class="post-count reading-time">9 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/08/13</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>一直听说Rust性能牛逼，无GC但可以自动内存管理。一直听说Rust有特殊的内存管理规则，而且是一款系统语言，一直想学一款低级语言，所以就选了Rust。</p>
+<p>看到Rust的Ownership相关内容，都说这部分不容易搞懂，记录一下。</p>
+<a id="more"></a>
+<h2 id="三个原则"><a href="#三个原则" class="headerlink" title="三个原则"></a>三个原则</h2><ul>
+<li>在Rust中的所有数据都有一个变量叫owner(所有者)</li>
+<li>同一时间只存在一个owner</li>
+<li>当执行的代码超出了owner的作用范围数据就会被drop掉</li>
+</ul>
+<h2 id="移动-move"><a href="#移动-move" class="headerlink" title="移动(move)"></a>移动(move)</h2><p>在需要内存管理的语言中，申请(alloc)一次内存就必须对应的释放(free)一次，如果这两个操作不是一一对应的情况就会出现问题。<br>在Rust中释放的动作是通过代码执行超出数据的作用域时对数据进行drop操作实现的，但是会出来以下情况，s1，s2共同持有同一个指针，当作用域结束时，如果没有其他规则，s1和s2的指针都需要向数据执行一次drop，这样会对同一块数据释放两次。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"><span class="keyword">let</span> s2 = s1;</span><br><span class="line"></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">"&#123;&#125;, world!"</span>, s1);</span><br></pre></td></tr></table></figure>
+<p>以上代码是无法编译成功的。</p>
+<p>在Rust中规定，像这样的操作会使s1无效，被称为s1的指针引用被<code>移动</code>到了s2上。这样在作用域中只有s2是有效变量，在作用域结束后也只有s2会执行drop操作。</p>
+<h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><p>在Rust中<code>移动</code>相当于别的语言中的‘浅拷贝’，当需要进行别的语言中的‘深拷贝’的行为时，可以调用一个通用的方法<code>clone</code></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"><span class="keyword">let</span> s2 = s1.clone();</span><br><span class="line"></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">"s1 = &#123;&#125;, s2 = &#123;&#125;"</span>, s1, s2);</span><br></pre></td></tr></table></figure>
+<p>这个方法是确实的将堆上的数据复制为两份，所以此时s1和s2都可以使用。</p>
+<p>原始数据类型因为有具体的空间和值，且被存储在栈上，每次都是执行<code>复制</code>操作。</p>
+<h2 id="方法中的所有权"><a href="#方法中的所有权" class="headerlink" title="方法中的所有权"></a>方法中的所有权</h2><p>当方法存在非原始数据类型时，数据传入方法的时候会进行<code>移动</code>或<code>复制</code>。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);  <span class="comment">// s 在作用域中</span></span><br><span class="line"></span><br><span class="line">    takes_ownership(s);             <span class="comment">// s 的值移动到了方法中</span></span><br><span class="line">                                    <span class="comment">// ... 然后就失效了</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">5</span>;                      <span class="comment">// x 在作用域中</span></span><br><span class="line"></span><br><span class="line">    makes_copy(x);                  <span class="comment">// x 被移动到方法中</span></span><br><span class="line">                                    <span class="comment">// 但是 i32 执行的是复制, 所以它依然能用</span></span><br><span class="line">                                    <span class="comment">// x 可以继续使用</span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// 在此，x和s离开了作用域</span></span><br><span class="line">  <span class="comment">// 但是s的值已经被移动了, 所以这里没发生什么事情</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">takes_ownership</span></span>(some_string: <span class="built_in">String</span>) &#123; <span class="comment">// some_string 进入了作用域</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"&#123;&#125;"</span>, some_string);</span><br><span class="line">&#125; <span class="comment">// 在此, some_string 离开了作用域并调用了`drop`操作`，释放了内存 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">makes_copy</span></span>(some_integer: <span class="built_in">i32</span>) &#123; <span class="comment">// some_integer 进入了作用域</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"&#123;&#125;"</span>, some_integer);</span><br><span class="line">&#125; <span class="comment">// 在此, some_integer 离开了作用域. 没发生什么特别的事情</span></span><br></pre></td></tr></table></figure>
+<p>如果在调用takes_ownership方法后尝试使用s变量，会无法编译。因为在Rust的规则中s已经被<code>移动</code>到方法参数上了，s已经失效，在方法中some_string会在方法结束后释放内存，所以原s的指针指向的内存会在方法结束后释放。</p>
+<p>所以如果需要在方法调用后想继续在方法外部使用传入的参数数据，其中一个方法是可以把数据再返回到方法外</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = gives_ownership();         <span class="comment">// gives_ownership 装返回值‘移动’至s1中</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> s2 = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);     <span class="comment">// s2 在作用域中被创建</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> s3 = takes_and_gives_back(s2);  <span class="comment">// s2 ‘移动’至takes_and_gives_back方法中</span></span><br><span class="line">                                        <span class="comment">// 同时也将方法的返回值‘移动’到s3中</span></span><br><span class="line">&#125; <span class="comment">// 在此, s3 离开了作用域并执行了drpp. </span></span><br><span class="line">  <span class="comment">// s2 也离开的作用域但是什么都没发生，因为已经‘移动’了</span></span><br><span class="line">  <span class="comment">// s1 离开了作用域并执行了drop</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">gives_ownership</span></span>() -&gt; <span class="built_in">String</span> &#123;             <span class="comment">// gives_ownership 将会把它的返回值‘移动’给调用它的作用域中</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> some_string = <span class="built_in">String</span>::from(<span class="string">"hello"</span>); <span class="comment">// some_string 在作用域中被创建</span></span><br><span class="line"></span><br><span class="line">    some_string                              <span class="comment">// some_string 被返回并‘移动‘到调用此方法的作用域中</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// takes_and_gives_back 将接收一个String并返回一个String</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">takes_and_gives_back</span></span>(a_string: <span class="built_in">String</span>) -&gt; <span class="built_in">String</span> &#123; <span class="comment">// a_string 来到作用域中</span></span><br><span class="line"></span><br><span class="line">    a_string  <span class="comment">// a_string 被返回并且’移动‘到调用者的作用域中</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="借取"><a href="#借取" class="headerlink" title="借取"></a>借取</h2><p>像上面那样如果想在方法外继续使用参数数据必须把数据再返回出去的作法会让代码变得非常繁琐，所以在Rust中有另一种传参的方式：<code>借取</code></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> len = calculate_length(&amp;s1);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"The length of '&#123;&#125;' is &#123;&#125;."</span>, s1, len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">calculate_length</span></span>(s: &amp;<span class="built_in">String</span>) -&gt; <span class="built_in">usize</span> &#123;</span><br><span class="line">    s.len()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>像上面的代码，可以看到s1使用了一种类似C语言中的语法似乎将一个引用传入了calculate_length方法，然后方法返回了s1的长度，并能在calculate_length后继续正常使用s1。</p>
+<p>‘&amp;’符号修饰的变量就是这个变量的引用，在Rust中对象的变量是堆地址在栈中所存放的引用，包含对象的指针，容量，长度等数据，变量的‘&amp;’引用只包含栈变量的指针，它不会获得数据的所有权。这样的参数传递方式叫做<code>借取</code>。就像现实中如果某个人有个东西，你可以向他借取，当你使用完后必须还给他。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">calculate_length</span></span>(s: &amp;<span class="built_in">String</span>) -&gt; <span class="built_in">usize</span> &#123; <span class="comment">// s 是一个字符串的引用</span></span><br><span class="line">    s.len()</span><br><span class="line">&#125; <span class="comment">// 在此, s 离开的作用域. 但是因为引用没有所有权，所以什么都没发生</span></span><br></pre></td></tr></table></figure>
+<p>向上面这样虽然将数据<code>借</code>给了方法内的作用域，但是在方法中，不可以改变s的值。s在方法体内是不可变的。</p>
+<h3 id="可变的借取"><a href="#可变的借取" class="headerlink" title="可变的借取"></a>可变的借取</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">    change(&amp;<span class="keyword">mut</span> s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">change</span></span>(some_string: &amp;<span class="keyword">mut</span> <span class="built_in">String</span>) &#123;</span><br><span class="line">    some_string.push_str(<span class="string">", world"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>声明一个可变变量，参数传递时加上&amp;mut，方法参数列表接收时使用&amp;mut声明，这样就可以在方法体中修改参数的值，并作用于方法外部。</p>
+<h3 id="借取的约束"><a href="#借取的约束" class="headerlink" title="借取的约束"></a>借取的约束</h3><p>可变的借取不能赋值给多个变量，以下的代码是错误的</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> r1 = &amp;<span class="keyword">mut</span> s;</span><br><span class="line"><span class="keyword">let</span> r2 = &amp;<span class="keyword">mut</span> s;</span><br><span class="line"></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">"&#123;&#125;, &#123;&#125;"</span>, r1, r2);</span><br></pre></td></tr></table></figure>
+<p>Rust语言约束<code>借取</code>操作只能在作用域中执行一次，这种约束能在编译时就防止了数据竞争。</p>
+<p>以下三种情况会出现数据竞争：</p>
+<ul>
+<li>两个或以上的指针同时访问同一块数据</li>
+<li>至少一个指针被用于写数据</li>
+<li>没有使用数据同步访问机制</li>
+</ul>
+<p>当然我们可以使用一些方式绕过这个约束创建多个<code>借取</code>变量</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> r1 = &amp;<span class="keyword">mut</span> s;</span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// r1 离开了作用域, 所以我们可以放心的创建新的引用</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> r2 = &amp;<span class="keyword">mut</span> s;</span><br></pre></td></tr></table></figure>
+<p>不可变的引用(<code>借取</code>)，和可变的引用(<code>借取</code>)不能同时出现，但是不可变的引用(<code>借取</code>)可以有多个</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> r1 = &amp;s; <span class="comment">// 没问题</span></span><br><span class="line"><span class="keyword">let</span> r2 = &amp;s; <span class="comment">// 没问题</span></span><br><span class="line"><span class="keyword">let</span> r3 = &amp;<span class="keyword">mut</span> s; <span class="comment">// 编译错误</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">"&#123;&#125;, &#123;&#125;, and &#123;&#125;"</span>, r1, r2, r3);</span><br></pre></td></tr></table></figure>
+<p>如果理解呢，因为不可变引用(<code>借取</code>)不会改变数据内容，所以无论有多少个同时出现都没问题。</p>
+<p>引用(<code>借取</code>)的作用范围是从声明开始到此变量的最后一次使用，所以以下代码是正确的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> r1 = &amp;s; <span class="comment">// 没问题</span></span><br><span class="line"><span class="keyword">let</span> r2 = &amp;s; <span class="comment">// 没问题</span></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">"&#123;&#125; and &#123;&#125;"</span>, r1, r2);</span><br><span class="line"><span class="comment">// r1 和 r2 此后没有再被使用</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> r3 = &amp;<span class="keyword">mut</span> s; <span class="comment">// 没问题</span></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">"&#123;&#125;"</span>, r3);</span><br></pre></td></tr></table></figure>
+<p>不可变引用r1和r2的最后一次使用是在可变引用r3的声明之前，所以这段代码是没有问题的。</p>
+<h3 id="悬空引用-借取"><a href="#悬空引用-借取" class="headerlink" title="悬空引用(借取)"></a>悬空引用(借取)</h3><p>在一些带有指针的编程语言中，不注意的话会很容易出现悬空引用，即一个指针变量指向的内存空间实际上已经在其他地方被释放了，这个变量就变成了悬空引用。在Rust中，编译器能保证代码不会出现悬空引用。当你引用了某些数据，编译器会确认引用是在数据的作用域内使用。</p>
+<p>以下是会出现悬空引用的代码，无法编译通过<br><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> reference_to_nothing = dangle();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">dangle</span></span>() -&gt; &amp;<span class="built_in">String</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">    &amp;s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在dangle方法中创建了s数据，然后返回s的引用(<code>借取</code>)，当方法完成后，s已经离开作用域，所以s会被执行drop操作，main方法中的reference_to_nothing变量实际获得的是经过drop操作的引用，即悬空引用。这段代码编译的错误帮助提示涉及Rust的另一特性<code>lifetime</code>的内容，以后再做记录。</p>
+<p>以下给出能正确编译的代码</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">no_dangle</span></span>() -&gt; <span class="built_in">String</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">    s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码no_dangle方法将s的所有权<code>转移</code>到了方法外，所以不会出错。</p>
+<h3 id="概述引用-借取-的规则"><a href="#概述引用-借取-的规则" class="headerlink" title="概述引用(借取)的规则"></a>概述引用(借取)的规则</h3><ul>
+<li>在任何时候，你可以拥有一个可变引用(<code>借取</code>)，或多个不可变引用(<code>借取</code>)</li>
+<li>引用(<code>借取</code>)必须是有效的</li>
+</ul>
+<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p>切片是一组数据的子集，在Rust中，切片是没有所有权的。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"hello world"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> hello = &amp;s[<span class="number">0</span>..<span class="number">5</span>];</span><br><span class="line"><span class="keyword">let</span> world = &amp;s[<span class="number">6</span>..<span class="number">11</span>];</span><br></pre></td></tr></table></figure>
+<p>以上代码为创建切片的方式，返回的切片不包含尾下标数据。</p>
+<p>切片的行为与引用(<code>借取</code>)类似，编译器会保证切片在最后一次使用之间的过程包含在源数据的作用域中，否则会编译失败。</p>
+<p>字符串字面量实际上是字符串切片，是一个不可变引用(<code>借取</code>)。</p>
+<p>在不需要数据使用权的方法参数中使用切片会使方法更通用，因为我们能很容易的从数据里创建切片</p>
+<p>切片参数及返回值如下表示</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> my_string = <span class="built_in">String</span>::from(<span class="string">"hello world"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> word = first_word(&amp;my_string[..]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> my_string_literal = <span class="string">"hello world"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> word = first_word(&amp;my_string_literal[..]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> word = first_word(my_string_literal);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">first_word</span></span>(s: &amp;<span class="built_in">str</span>) -&gt; &amp;<span class="built_in">str</span> &#123;</span><br><span class="line">    s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2019/08/13/Rust中的所有权规则-Ownership/">https://www.huangyuexiang.com/2019/08/13/Rust中的所有权规则-Ownership/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2019/08/13/Rust中的所有权规则-Ownership/">August 13th 2019, 5:13:38 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2019/08/13/Rust中的所有权规则-Ownership/">August 13th 2019, 11:09:49 pm</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/08/06/在vue组件中实现属性透传/" title="在vue组件中实现属性透传">
+                    <div class="prevTitle">在vue组件中实现属性透传</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:gdtdpt@foxmail.com" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/gdtdpt" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#三个原则"><span class="toc-number">1.</span> <span class="toc-text">三个原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#移动-move"><span class="toc-number">2.</span> <span class="toc-text">移动(move)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复制"><span class="toc-number">3.</span> <span class="toc-text">复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法中的所有权"><span class="toc-number">4.</span> <span class="toc-text">方法中的所有权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#借取"><span class="toc-number">5.</span> <span class="toc-text">借取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可变的借取"><span class="toc-number">5.1.</span> <span class="toc-text">可变的借取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#借取的约束"><span class="toc-number">5.2.</span> <span class="toc-text">借取的约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#悬空引用-借取"><span class="toc-number">5.3.</span> <span class="toc-text">悬空引用(借取)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概述引用-借取-的规则"><span class="toc-number">5.4.</span> <span class="toc-text">概述引用(借取)的规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#切片"><span class="toc-number">6.</span> <span class="toc-text">切片</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 13
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/13</span><a class="archive-post-title" href="/2019/08/13/Rust中的所有权规则-Ownership/">Rust中的所有权规则(Ownership)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/06</span><a class="archive-post-title" href="/2019/08/06/在vue组件中实现属性透传/">在vue组件中实现属性透传</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/05</span><a class="archive-post-title" href="/2019/05/05/Golang中的单例模式/">Golang中的单例模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/04</span><a class="archive-post-title" href="/2019/05/04/用Golang做一个命令行翻译工具/">用Golang做一个命令行翻译工具</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span><a class="archive-post-title" href="/2019/05/01/Golang学习笔记——定义函数类型实现接口/">Golang学习笔记——定义函数类型实现接口</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/27</span><a class="archive-post-title" href="/2019/04/27/理解Angular中的Resolver/">理解Angular中的Resolver</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/07</span><a class="archive-post-title" href="/2019/03/07/无限动态列表/">无限动态列表</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/06</span><a class="archive-post-title" href="/2019/03/06/动态浮动按钮/">动态浮动按钮</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/24</span><a class="archive-post-title" href="/2019/02/24/在Flutter-Firebase应用中使用Redux——体重跟踪4/">在Flutter Firebase应用中使用Redux——体重跟踪4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/09</span><a class="archive-post-title" href="/2019/02/09/Flutter中的Firebase数据库——体重跟踪APP-3/">Flutter中的Firebase数据库——体重跟踪APP 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/09</span><a class="archive-post-title" href="/2019/02/09/Scrapy学习笔记——Scrapy概览/">Scrapy学习笔记——Scrapy概览</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span><a class="archive-post-title" href="/2019/01/20/用Flutter创建一个全屏的对话框-体重跟踪APP-2/">用Flutter创建一个全屏的对话框 - 体重跟踪APP 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href="/2019/01/17/Flutter-ListView-教程-–-做一个体重追踪APP-1/">Flutter ListView 教程 – 做一个体重追踪APP 1</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="flutter"><span class="iconfont-archer">&#xe606;</span>flutter</span>
+    
+        <span class="sidebar-tag-name" data-tags="dart"><span class="iconfont-archer">&#xe606;</span>dart</span>
+    
+        <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
+    
+        <span class="sidebar-tag-name" data-tags="rust"><span class="iconfont-archer">&#xe606;</span>rust</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="scrapy"><span class="iconfont-archer">&#xe606;</span>scrapy</span>
+    
+        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="javascript"><span class="iconfont-archer">&#xe606;</span>javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="angular"><span class="iconfont-archer">&#xe606;</span>angular</span>
+    
+        <span class="sidebar-tag-name" data-tags="typescript"><span class="iconfont-archer">&#xe606;</span>typescript</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Flutter"><span class="iconfont-archer">&#xe60a;</span>Flutter</span>
+    
+        <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
+    
+        <span class="sidebar-category-name" data-categories="Rust"><span class="iconfont-archer">&#xe60a;</span>Rust</span>
+    
+        <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
+    
+        <span class="sidebar-category-name" data-categories="VUE"><span class="iconfont-archer">&#xe60a;</span>VUE</span>
+    
+        <span class="sidebar-category-name" data-categories="Angular"><span class="iconfont-archer">&#xe60a;</span>Angular</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Richard Wong"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
