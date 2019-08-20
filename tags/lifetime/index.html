@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>关于我的一些事情 · Richard Wong&#39;s Blog</title>
+    <title>Richard Wong&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,8 +203,6 @@
 </head>
 
     
-        <body class="about-body">
-    
     
 <header class="header">
 
@@ -222,22 +220,16 @@
 
 
 
-
-height:50vh;
 ">
     
     <!-- 主页  -->
-    
-    
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/about-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
-            
-            关于我的一些事情
             
         </h1>
         <!-- 副标题 -->
@@ -346,31 +338,45 @@ height:50vh;
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <!-- 不可以删除，否则会调用post的layout  -->
-<main class="main about-page">
-    <article class="article-entry">
-        <h2 id="一些信息"><a href="#一些信息" class="headerlink" title="一些信息"></a>一些信息</h2><ul>
-<li>毕业几年才发觉对编程感兴趣</li>
-<li>进入IT行业前几年一直未找到方向</li>
-<li>后端几年，前端+移动端混合几年</li>
-<li>不喜欢重复的工作，总在重重复复中寻找刺激</li>
-<li>幡然醒悟如何做一名合格的程序员</li>
-<li>向着目标死磕就对了</li>
-</ul>
-<h2 id="一些感受"><a href="#一些感受" class="headerlink" title="一些感受"></a>一些感受</h2><ul>
-<li>Angular太庞大，深入不容易，模板代码很枯燥;</li>
-<li>Typescript类型检查好，使用js库总先找@types烦，js库版本与@types版本总对不上;</li>
-<li>Vue用起来很轻量，与原生js兼容，三方库用着没有心理负担;</li>
-<li>Cordova虽好，但我能力有限，最怕听到“别的APP都有这个功能”;</li>
-<li>SpringBoot感觉还是不够轻量，node后台只需几行代码;</li>
-<li>Kotlin感觉语法糖很多，没用习惯不知道该用哪个糖;</li>
-<li>OC很C，Swift很先进，总在进阶处徘徊;</li>
-<li>Python installing…</li>
-</ul>
-<p><br><br><br></p>
-<p><img src="/assets/about.jpg" alt="about"></p>
-
+            <main class="main index-page">
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2019/08/20/Rust中的变量寿命——lifetime/">
+            
+                <span>Rust中的变量生存期——lifetime</span>
+        </a>
+        <div class="abstract-content">
+            在之前的文章中，关于引用与借取的内容有一点没有详细说明，就是在Rust中的所有引用都有生存期(lifetime)，它是用于表达引用的作用范围。
+大多数情况下，生存期都是隐式推断的，但是如果有多种可能导致无法推断，就必须使用泛型生存期参数进行声明。
+生存期这个概念大概是Rust语言中最具特色的特点，这篇文章只简要解释常见的生存期语法。
+使用生存期来预防悬空引用生存期的主要目的是确保在程序中引用到预期的数据，防止悬空引用。
+12345678910&#123;    let r;    &#123;        let x = 5;        r = &amp;x;    &#125; ...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/08/20</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="rust">rust</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="lifetime">lifetime</a>
+    
+</div>
+            
+        </div>
     </article>
+    
+    <!-- paginator  -->
+    
 </main>
             <!-- profile -->
             
