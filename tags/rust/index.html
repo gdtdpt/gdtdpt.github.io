@@ -351,11 +351,11 @@
                 <span>Rust中的变量生存期——lifetime</span>
         </a>
         <div class="abstract-content">
-            在之前的文章中，关于引用与借取的内容有一点没有详细说明，就是在Rust中的所有引用都有生存期(lifetime)，它是用于表达引用的作用范围。
-大多数情况下，生存期都是隐式推断的，但是如果有多种可能导致无法推断，就必须使用泛型生存期参数进行声明。
-生存期这个概念大概是Rust语言中最具特色的特点，这篇文章只简要解释常见的生存期语法。
-使用生存期来预防悬空引用生存期的主要目的是确保在程序中引用到预期的数据，防止悬空引用。
-12345678910&#123;    let r;    &#123;        let x = 5;        r = &amp;x;    &#125; ...
+            <p>在之前的文章中，关于<code>引用与借取</code>的内容有一点没有详细说明，就是在Rust中的所有引用都有<code>生存期(lifetime)</code>，它是用于表达引用的作用范围。</p>
+<p>大多数情况下，<code>生存期</code>都是隐式推断的，但是如果有多种可能导致无法推断，就必须使用<code>泛型生存期参数</code>进行声明。</p>
+<p><code>生存期</code>这个概念大概是Rust语言中最具特色的特点，这篇文章只简要解释常见的<code>生存期</code>语法。</p>
+<h2 id="使用生存期来预防悬空引用"><a href="#使用生存期来预防悬空引用" class="headerlink" title="使用生存期来预防悬空引用"></a>使用<code>生存期</code>来预防悬空引用</h2><p><code>生存期</code>的主要目的是确保在程序中引用到预期的数据，防止悬空引用。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> r;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> x = <span class="number">5</span>;</span><br><span class="line">        r = &amp;x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"r: &#123;&#125;"</span>, r);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -664,14 +664,9 @@
     
     
     
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 14
+        Total : 15
         </div>
         <!-- search  -->
         
@@ -684,6 +679,11 @@
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href="/2019/08/21/Golang的交叉编译/">Golang的交叉编译</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -760,21 +760,23 @@
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
-    
         <span class="sidebar-tag-name" data-tags="flutter"><span class="iconfont-archer">&#xe606;</span>flutter</span>
     
         <span class="sidebar-tag-name" data-tags="dart"><span class="iconfont-archer">&#xe606;</span>dart</span>
     
-        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+        <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
     
-        <span class="sidebar-tag-name" data-tags="scrapy"><span class="iconfont-archer">&#xe606;</span>scrapy</span>
+        <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
     
         <span class="sidebar-tag-name" data-tags="rust"><span class="iconfont-archer">&#xe606;</span>rust</span>
     
         <span class="sidebar-tag-name" data-tags="lifetime"><span class="iconfont-archer">&#xe606;</span>lifetime</span>
     
         <span class="sidebar-tag-name" data-tags="ownership"><span class="iconfont-archer">&#xe606;</span>ownership</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="scrapy"><span class="iconfont-archer">&#xe606;</span>scrapy</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
@@ -817,13 +819,13 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
-    
         <span class="sidebar-category-name" data-categories="Flutter"><span class="iconfont-archer">&#xe60a;</span>Flutter</span>
     
-        <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
+        <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
     
         <span class="sidebar-category-name" data-categories="Rust"><span class="iconfont-archer">&#xe60a;</span>Rust</span>
+    
+        <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
     
         <span class="sidebar-category-name" data-categories="VUE"><span class="iconfont-archer">&#xe60a;</span>VUE</span>
     

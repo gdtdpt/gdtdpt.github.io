@@ -346,16 +346,51 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href="/2019/08/21/Golang的交叉编译/">
+            
+                <span>Golang的交叉编译</span>
+        </a>
+        <div class="abstract-content">
+            <p>之前学习golang只是想了解一下这个新的热门语言，并没有深究，也没有机会在工作中使用。</p>
+<p>今天刚才遇到一个关于golang交叉编译的问题。</p>
+<p>需求是这样的，filebeat官方没有支持AIX系统，领导想试试能不能自己编译出一个AIX系统的字节码文件，把firebeat安装在AIX上。</p>
+<p>我之前学习golang的时候有看过关于golang编译出来的可执行文件内的库是静态连接，把库包含在了可执行文件里，所以编译出来的文件比较大。</p>
+<p>刚好filebeat是用golang编写的，那么既然库都是静态链接的，那应该支持交叉编译，比如在windows环境编译一个linux环境的可执行文件。</p>
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/08/21</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="golang">golang</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="compile">compile</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href="/2019/08/20/Rust中的变量寿命——lifetime/">
             
                 <span>Rust中的变量生存期——lifetime</span>
         </a>
         <div class="abstract-content">
-            在之前的文章中，关于引用与借取的内容有一点没有详细说明，就是在Rust中的所有引用都有生存期(lifetime)，它是用于表达引用的作用范围。
-大多数情况下，生存期都是隐式推断的，但是如果有多种可能导致无法推断，就必须使用泛型生存期参数进行声明。
-生存期这个概念大概是Rust语言中最具特色的特点，这篇文章只简要解释常见的生存期语法。
-使用生存期来预防悬空引用生存期的主要目的是确保在程序中引用到预期的数据，防止悬空引用。
-12345678910&#123;    let r;    &#123;        let x = 5;        r = &amp;x;    &#125; ...
+            <p>在之前的文章中，关于<code>引用与借取</code>的内容有一点没有详细说明，就是在Rust中的所有引用都有<code>生存期(lifetime)</code>，它是用于表达引用的作用范围。</p>
+<p>大多数情况下，<code>生存期</code>都是隐式推断的，但是如果有多种可能导致无法推断，就必须使用<code>泛型生存期参数</code>进行声明。</p>
+<p><code>生存期</code>这个概念大概是Rust语言中最具特色的特点，这篇文章只简要解释常见的<code>生存期</code>语法。</p>
+<h2 id="使用生存期来预防悬空引用"><a href="#使用生存期来预防悬空引用" class="headerlink" title="使用生存期来预防悬空引用"></a>使用<code>生存期</code>来预防悬空引用</h2><p><code>生存期</code>的主要目的是确保在程序中引用到预期的数据，防止悬空引用。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> r;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> x = <span class="number">5</span>;</span><br><span class="line">        r = &amp;x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"r: &#123;&#125;"</span>, r);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -645,48 +680,6 @@ golang创建http服务代码如下
         </div>
     </article>
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/24/在Flutter-Firebase应用中使用Redux——体重跟踪4/">
-            
-                <span>在Flutter Firebase应用中使用Redux——体重跟踪4</span>
-        </a>
-        <div class="abstract-content">
-            
-本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接REDUXING FLUTTER FIREBASE APP – WEIGHTTRACKER 4
-
-
-这篇文章中所使用的Firebase_auth任何版本在我的机器上都无法编译通过，考虑到上一篇对环境的要求非常严苛，以及此篇我无法正常运行应用，所以这个体重跟踪应用的系列暂时不再继续翻译
-
-
-英语水平有限，内容未必准确
-
-在这篇文章中我将展示怎样把flutter_redux库添加到我现有的与Firebase有连接的应用中。这里展示的开发内容是我的体重追踪应用(追踪体重的简单应用)的一部分，并且只有这些内容。
-
-提示： 以下...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/24</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
     <!-- paginator  -->
     
     <nav class="page-nav">
@@ -948,14 +941,9 @@ golang创建http服务代码如下
     
     
     
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 14
+        Total : 15
         </div>
         <!-- search  -->
         
@@ -968,6 +956,11 @@ golang创建http服务代码如下
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href="/2019/08/21/Golang的交叉编译/">Golang的交叉编译</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1044,21 +1037,23 @@ golang创建http服务代码如下
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
-    
         <span class="sidebar-tag-name" data-tags="flutter"><span class="iconfont-archer">&#xe606;</span>flutter</span>
     
         <span class="sidebar-tag-name" data-tags="dart"><span class="iconfont-archer">&#xe606;</span>dart</span>
     
-        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+        <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
     
-        <span class="sidebar-tag-name" data-tags="scrapy"><span class="iconfont-archer">&#xe606;</span>scrapy</span>
+        <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
     
         <span class="sidebar-tag-name" data-tags="rust"><span class="iconfont-archer">&#xe606;</span>rust</span>
     
         <span class="sidebar-tag-name" data-tags="lifetime"><span class="iconfont-archer">&#xe606;</span>lifetime</span>
     
         <span class="sidebar-tag-name" data-tags="ownership"><span class="iconfont-archer">&#xe606;</span>ownership</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="scrapy"><span class="iconfont-archer">&#xe606;</span>scrapy</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
@@ -1101,13 +1096,13 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
-    
         <span class="sidebar-category-name" data-categories="Flutter"><span class="iconfont-archer">&#xe60a;</span>Flutter</span>
     
-        <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
+        <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
     
         <span class="sidebar-category-name" data-categories="Rust"><span class="iconfont-archer">&#xe60a;</span>Rust</span>
+    
+        <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
     
         <span class="sidebar-category-name" data-categories="VUE"><span class="iconfont-archer">&#xe60a;</span>VUE</span>
     
