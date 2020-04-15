@@ -359,6 +359,40 @@ height:50vh;
     
     
     <article class="index-post">
+        <a class="abstract-title" href="/2020/04/15/数据库中间件MyCat或dble在activiti-5-22中报invalid-stream-header-EFBFBDEF的问题处理记录/">
+            
+                <span>数据库中间件MyCat或dble在activiti-5.22中报invalid stream header: EFBFBDEF的问题处理记录</span>
+        </a>
+        <div class="abstract-content">
+            <p>因为项目要与数据库实例解耦和为了将来对数据进行分库分表的需要，最近对公司项目与数据库之间加入数据库中间件，因为MyCat-2.0在beta状态，MyCat-1.6已经不怎么进行维护了。所以选择了对MyCat进行二次开发的dble。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>项目中有使用activiti-5.22版本，在切换至dble后发现在执行一些activiti表的操作时会出现如下异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">### Cause: org.activiti.engine.ActivitiException: Couldn&apos;t deserialize object in variable xxxx with root cause</span><br><span class="line"></span><br><span class="line">java.io.StreamCorruptedException: invalid stream header: EFBFBDEF</span><br></pre></td></tr></table></figure></p>
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/04/15</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="mysql">mysql</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="dble">dble</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="mycat">mycat</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href="/2019/08/21/Golang的交叉编译/">
             
                 <span>Golang的交叉编译</span>
@@ -637,48 +671,6 @@ golang创建http服务代码如下
             <!-- date  -->
             <div class="abstract-date">
                 <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/03/07</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/03/06/动态浮动按钮/">
-            
-                <span>动态浮动按钮</span>
-        </a>
-        <div class="abstract-content">
-            
-本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接DYNAMIC SLIVER FLOATINGACTIONBUTTON
-
-
-英语水平有限，内容未必准确
-
-在这篇文章中我将一步步创建一个固定在FlexibleSpaceBar(下面那样)边缘的FloatingActionButton。让我们开始吧。
-
-长求总：我(作者)发布在pub package，这样你也可以实现类似的FAB行为。请随意使用和扩展。🙂
-
-
-问题想实现上面那样固定FloatingActionButton的主要问题是在CustomScrollView或SliverList中没有地方把一个Widget放置...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/03/06</span>
             </div>
             <!-- tags  -->
             
@@ -1046,10 +1038,9 @@ golang创建http服务代码如下
     
     
     
-    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 15
+        Total : 16
         </div>
         <!-- search  -->
         
@@ -1059,6 +1050,20 @@ golang创建http服务代码如下
     
     
     
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/15</span><a class="archive-post-title" href="/2020/04/15/数据库中间件MyCat或dble在activiti-5-22中报invalid-stream-header-EFBFBDEF的问题处理记录/">数据库中间件MyCat或dble在activiti-5.22中报invalid stream header: EFBFBDEF的问题处理记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
@@ -1163,6 +1168,12 @@ golang创建http服务代码如下
     
         <span class="sidebar-tag-name" data-tags="javascript"><span class="iconfont-archer">&#xe606;</span>javascript</span>
     
+        <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="dble"><span class="iconfont-archer">&#xe606;</span>dble</span>
+    
+        <span class="sidebar-tag-name" data-tags="mycat"><span class="iconfont-archer">&#xe606;</span>mycat</span>
+    
         <span class="sidebar-tag-name" data-tags="angular"><span class="iconfont-archer">&#xe606;</span>angular</span>
     
         <span class="sidebar-tag-name" data-tags="typescript"><span class="iconfont-archer">&#xe606;</span>typescript</span>
@@ -1211,6 +1222,8 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
     
         <span class="sidebar-category-name" data-categories="VUE"><span class="iconfont-archer">&#xe60a;</span>VUE</span>
+    
+        <span class="sidebar-category-name" data-categories="Database"><span class="iconfont-archer">&#xe60a;</span>Database</span>
     
         <span class="sidebar-category-name" data-categories="Angular"><span class="iconfont-archer">&#xe60a;</span>Angular</span>
     
