@@ -346,6 +346,35 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href="/2020/05/09/Nginx配置一个端口同时处理多种协议/">
+            
+                <span>Nginx配置一个端口同时处理多种协议</span>
+        </a>
+        <div class="abstract-content">
+            <p>在工作中遇到一个问题，公司因为安全的要求，以前服务在公司内统一使用的http访问方式，现在对一些非我们部门内部的访问需要改为https。这个很简单，Nginx直接配置就完了。<br>但是过了一天有同事反应有些系统因为很久了，已经没人维护了，所以暂时没法立即修改，还是需要使用http进行访问，但此时已经有一些系统使用相同的端口改为了https访问。<br>现在就出现了可能同一时间访问的客户端可能会分别使用http和https访问同一端口，但是Nginx的server配置一个server端口只能配置一个协议，于是问题就变成了如何让Nginx使用多种协议监听同一个端口。</p>
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/05/09</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="nginx">nginx</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href="/2020/04/15/数据库中间件MyCat或dble在activiti-5-22中报invalid-stream-header-EFBFBDEF的问题处理记录/">
             
                 <span>数据库中间件MyCat或dble在activiti-5.22中报invalid stream header: EFBFBDEF的问题处理记录</span>
@@ -627,45 +656,6 @@ golang创建http服务代码如下
         <a class="post-tag" href="javascript:void(0);" data-tags="angular">angular</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags="typescript">typescript</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/03/07/无限动态列表/">
-            
-                <span>无限动态列表</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>本文来自于我自己学习Flutter时所学习的教程的中文翻译，原文链接<a href="https://marcinszalek.pl/flutter/infinite-dynamic-listview/" target="_blank" rel="noopener">INFINITE DYNAMIC LISTVIEW</a></p>
-</blockquote>
-<blockquote>
-<p>英语水平有限，内容未必准确</p>
-</blockquote>
-<p>在这篇文章中，我将快速介绍如何做一个无限的列表(ListView)，当用户滑动到最底端时可以动态的加载更多数据。最终结果就像下面这样：</p>
-<p><img src="http://wx3.sinaimg.cn/large/006VI9Tcly1g0u7gnkve6g307i0dcwsb.gif" alt="infinite_dynamic_list_view_1"></p>
-<p>让我们开始吧！</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/03/07</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="flutter">flutter</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="dart">dart</a>
     
 </div>
             
@@ -962,9 +952,18 @@ golang创建http服务代码如下
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 16
+        Total : 17
         </div>
         <!-- search  -->
         
@@ -977,6 +976,11 @@ golang创建http服务代码如下
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span><a class="archive-post-title" href="/2020/05/09/Nginx配置一个端口同时处理多种协议/">Nginx配置一个端口同时处理多种协议</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1080,6 +1084,8 @@ golang创建http服务代码如下
     
         <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
     
+        <span class="sidebar-tag-name" data-tags="nginx"><span class="iconfont-archer">&#xe606;</span>nginx</span>
+    
         <span class="sidebar-tag-name" data-tags="rust"><span class="iconfont-archer">&#xe606;</span>rust</span>
     
         <span class="sidebar-tag-name" data-tags="lifetime"><span class="iconfont-archer">&#xe606;</span>lifetime</span>
@@ -1141,11 +1147,13 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
     
+        <span class="sidebar-category-name" data-categories="Nginx"><span class="iconfont-archer">&#xe60a;</span>Nginx</span>
+    
         <span class="sidebar-category-name" data-categories="Rust"><span class="iconfont-archer">&#xe60a;</span>Rust</span>
     
         <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
     
-        <span class="sidebar-category-name" data-categories="VUE"><span class="iconfont-archer">&#xe60a;</span>VUE</span>
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
     
         <span class="sidebar-category-name" data-categories="Database"><span class="iconfont-archer">&#xe60a;</span>Database</span>
     
