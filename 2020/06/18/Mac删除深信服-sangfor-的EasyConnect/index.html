@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Richard Wong&#39;s Blog</title>
+    <title>Mac删除深信服(sangfor)的EasyConnect · Richard Wong&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,12 +203,23 @@
 </head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Richard Wong&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Mac删除深信服(sangfor)的EasyConnect</a>
+            </div>
+    </div>
     
     <a class="home-link" href="/">Richard Wong's Blog</a>
 </header>
@@ -220,24 +231,78 @@
 
 
 
+
+height:50vh;
 ">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            Mac删除深信服(sangfor)的EasyConnect
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Mac">Mac</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Sangfor">Sangfor</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="EasyConnect">EasyConnect</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">425</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/06/18</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -338,45 +403,59 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/08/21/Golang的交叉编译/">
-            
-                <span>Golang的交叉编译</span>
-        </a>
-        <div class="abstract-content">
-            <p>之前学习golang只是想了解一下这个新的热门语言，并没有深究，也没有机会在工作中使用。</p>
-<p>今天刚才遇到一个关于golang交叉编译的问题。</p>
-<p>需求是这样的，filebeat官方没有支持AIX系统，领导想试试能不能自己编译出一个AIX系统的字节码文件，把firebeat安装在AIX上。</p>
-<p>我之前学习golang的时候有看过关于golang编译出来的可执行文件内的库是静态连接，把库包含在了可执行文件里，所以编译出来的文件比较大。</p>
-<p>刚好filebeat是用golang编写的，那么既然库都是静态链接的，那应该支持交叉编译，比如在windows环境编译一个linux环境的可执行文件。</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/08/21</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="golang">golang</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="compile">compile</a>
-    
-</div>
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>公司使用深信服(Sangfor)的EasyConnect作为vpn客户端，但是在MacOS上安装后无法在废纸篓中完全删除，会提示’不能完成此操作，因为项目‘wheelfile’正在使用中。’。<br>深信服的官网问答区也有这个问题，但是下面给出的解决办法无法解决问题却被盖上’官方采纳’的章了。</p>
+<p>于是在谷歌搜索发现有一篇是关于<a href="http://claude-ray.com/2019/08/24/remove-easyconnect-daemons-on-mac/" target="_blank" rel="noopener">移除EasyConnect常驻后台进程</a>的文章，给了我一点启发，虽然不知道此方案能否真的将EasyConnect删除干净，但是至少能将一些EasyConnect安装时的守护进程和自动启动之类的配置删除掉。</p>
+<a id="more"></a>
+<h2 id="删除EasyConnect-app"><a href="#删除EasyConnect-app" class="headerlink" title="删除EasyConnect.app"></a>删除EasyConnect.app</h2><p>虽然提示’不能完成此操作，因为项目‘wheelfile’正在使用中。’，其实真想删除方法很简单<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rm -rf ~/.Trash/EasyConnect.app</span><br></pre></td></tr></table></figure></p>
+<p>只需要执行这条命令就可以把app文件删掉。</p>
+<h2 id="删除EasyConnect安装时设置的自动启动项"><a href="#删除EasyConnect安装时设置的自动启动项" class="headerlink" title="删除EasyConnect安装时设置的自动启动项"></a>删除EasyConnect安装时设置的自动启动项</h2><p>上面的文章中有说开机自启守护进程配置在<code>/Library/LaunchDaemons/</code>这个目录，所以进入这个目录将所有以<code>com.sangfor</code>开头的plist文件都删除掉就行了。</p>
+<h2 id="删除EasyConnect自起代理"><a href="#删除EasyConnect自起代理" class="headerlink" title="删除EasyConnect自起代理"></a>删除EasyConnect自起代理</h2><p>同样是上面的文章中有说在<code>/Library/LaunchAgents/</code>目录下也存在深信服的常驻后台服务，同样将所有以<code>com.sangfor</code>开关的plist文件都删除掉。</p>
+<p>此时重启电脑就可以使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ launchctl list | grep sangfor</span><br></pre></td></tr></table></figure></p>
+<p>查看当前启动项中是否还包含深信服的服务。</p>
+<p>如果不想重启也可以使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ launchctl remove com.sangfor.xxx</span><br></pre></td></tr></table></figure></p>
+<p>命令一个个关闭正在运行的服务。</p>
+
     </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2020/06/18/Mac删除深信服-sangfor-的EasyConnect/">https://www.huangyuexiang.com/2020/06/18/Mac删除深信服-sangfor-的EasyConnect/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2020/06/18/Mac删除深信服-sangfor-的EasyConnect/">June 18th 2020, 1:15:15 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2020/06/18/Mac删除深信服-sangfor-的EasyConnect/">June 18th 2020, 1:31:18 pm</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2020/05/09/Nginx配置一个端口同时处理多种协议/" title="Nginx配置一个端口同时处理多种协议">
+                    <div class="prevTitle">Nginx配置一个端口同时处理多种协议</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -454,6 +533,24 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#删除EasyConnect-app"><span class="toc-number">1.</span> <span class="toc-text">删除EasyConnect.app</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除EasyConnect安装时设置的自动启动项"><span class="toc-number">2.</span> <span class="toc-text">删除EasyConnect安装时设置的自动启动项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除EasyConnect自起代理"><span class="toc-number">3.</span> <span class="toc-text">删除EasyConnect自起代理</span></a></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -934,6 +1031,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
