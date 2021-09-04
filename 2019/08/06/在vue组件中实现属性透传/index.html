@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">748</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">753</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -403,18 +403,18 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>在React中属性透传是一件很随意的事，只要在某个子组件上写上<code>{...this.props}</code>就能简单的实现属性透传，这对封装第三方组件非常友好。</p>
-<p>在Angular中没有尝试过，但是想了一下似乎可以通过<code>ViewChild</code>和继承被扩展类来实现属性透传。</p>
-<p>最近在Vue项目中遇到了一个类似的需求，但是百度了一会似乎没什么文章说这个问题，虽然有关vue的HOC相关文章不少，但是我遇到的需求和HOC还有点不太一样。</p>
-<p>需求是使用iView组件库，其中当使用<code>Upload</code>组件时必须在请求的body中传递固定的参数</p>
+        <p>在 React 中属性透传是一件很随意的事，只要在某个子组件上写上<code>{...this.props}</code>就能简单的实现属性透传，这对封装第三方组件非常友好。</p>
+<p>在 Angular 中没有尝试过，但是想了一下似乎可以通过<code>ViewChild</code>和继承被扩展类来实现属性透传。</p>
+<p>最近在 Vue 项目中遇到了一个类似的需求，但是百度了一会似乎没什么文章说这个问题，虽然有关 vue 的 HOC 相关文章不少，但是我遇到的需求和 HOC 还有点不太一样。</p>
+<p>需求是使用 iView 组件库，其中当使用<code>Upload</code>组件时必须在请求的 body 中传递固定的参数</p>
 <a id="more"></a>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;Upload :data=<span class="string">"body"</span>/&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">export default &#123;</span></span><br><span class="line"><span class="regexp">    data() &#123;</span></span><br><span class="line"><span class="regexp">        return &#123;</span></span><br><span class="line"><span class="regexp">            body: &#123;</span></span><br><span class="line"><span class="regexp">                'system': 'mySystem'</span></span><br><span class="line"><span class="regexp">            &#125;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
-<p>像上面这样的代码不想每次都写<code>:data=&quot;body&quot;</code>这样的代码，封装的想法还是有的。比如可以把<code>data</code>封闭到mixin里，但是<code>Upload</code>组件每次还要记得写<code>:data=&quot;body&quot;</code>，也要记得写mixins才不会出错，最好是能把<code>Upload</code>包装成自己的组件，然后组件内部定义好<code>Upload</code>需要的默认的属性。</p>
+<p>像上面这样的代码不想每次都写<code>:data=&quot;body&quot;</code>这样的代码，封装的想法还是有的。比如可以把<code>data</code>封闭到 mixin 里，但是<code>Upload</code>组件每次还要记得写<code>:data=&quot;body&quot;</code>，也要记得写 mixins 才不会出错，最好是能把<code>Upload</code>包装成自己的组件，然后组件内部定义好<code>Upload</code>需要的默认的属性。</p>
 <p>这样还不够，因为只是单纯的对<code>Upload</code>进行封装，<code>Upload</code>组件上原有的属性和事件最好也能直接使用。</p>
-<p>这里就需要进行属性透传。假设我要把<code>Upload</code>封装到<code>MyUpload</code>组件中，<code>MyUpload</code>组件的属性和事件至少应该与<code>Upload</code>组件上的属性和事件一一对应，如果名字一样就更好了，这样说明文档都省了，直接看iView的就行了。</p>
-<p>关于这个想法我咨询了很有经验的同事，同事跟我说需要用vue的方法写JXS，我以为是一种类似React里的JXS那样写，只是可能步骤上有些出入，业余时间研究了几天感觉不太对。后来渐渐看到HOC相关的内容，感觉应该差不多是这个。</p>
-<p>但是在HOC的文章中，作者都会定义一个方法，接收一个组件，返回一个被扩展的组件，而我需要的仅仅只是一个扩展好的组件，能直接将这个组件注册到全局中或者在局部被父组件引用，不需要再传入返回这些操作。但是感觉方向上和HOC是一致的，于是开始尝试。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; Upload &#125; <span class="keyword">from</span> <span class="string">'iview'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    name: <span class="string">'MyUpload'</span>,</span><br><span class="line">    props: Upload.props,</span><br><span class="line">    render(h) &#123;</span><br><span class="line">        <span class="keyword">return</span> h(Upload, &#123;</span><br><span class="line">            on: <span class="keyword">this</span>.$listeners,</span><br><span class="line">            attrs: <span class="keyword">this</span>.$attrs,</span><br><span class="line">            props: &#123;</span><br><span class="line">                ...this.props,</span><br><span class="line">                data: <span class="keyword">this</span>.data || &#123;</span><br><span class="line">                    <span class="string">'system'</span>: <span class="string">'mySystem'</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            scopedSlots: <span class="keyword">this</span>.$scopedSlot</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里就需要进行属性透传。假设我  要把<code>Upload</code>封装到<code>MyUpload</code>组件中，<code>MyUpload</code>组件的属性和事件至少应该与<code>Upload</code>组件上的属性和事件一一对应，如果名字一样就更好了，这样说明文档都省了，直接看 iView 的就行了。</p>
+<p>关于这个想法我咨询了很有经验的同事，同事跟我说需要用 vue 的方法写 JXS，我以为是一种类似 React 里的 JXS 那样写，只是可能步骤上有些出入，业余时间研究了几天感觉不太对。后来渐渐看到 HOC 相关的内容，感觉应该差不多是这个。</p>
+<p>但是在 HOC 的文章中，作者都会定义一个方法，接收一个组件，返回一个被扩展的组件，而我需要的仅仅只是一个扩展好的组件，能直接将这个组件注册到全局中或者在局部被父组件引用，不需要再传入返回这些操作。但是感觉方向上和 HOC 是一致的，于是开始尝试。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; Upload &#125; <span class="keyword">from</span> <span class="string">'iview'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    name: <span class="string">'MyUpload'</span>,</span><br><span class="line">    props: Upload.props,</span><br><span class="line">    render(h) &#123;</span><br><span class="line">        <span class="keyword">return</span> h(Upload, &#123;</span><br><span class="line">            on: <span class="keyword">this</span>.$listeners,</span><br><span class="line">            attrs: <span class="keyword">this</span>.$attrs,</span><br><span class="line">            props: &#123;</span><br><span class="line">                ...this.props,</span><br><span class="line">                data: <span class="keyword">this</span>.data || &#123;</span><br><span class="line">                    <span class="string">'system'</span>: <span class="string">'mySystem'</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            scopedSlots: <span class="keyword">this</span>.$scopedSlot</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
 <p><code>h</code>函数就相当于<code>createElement</code>函数，官网有详细介绍。这样创建的<code>MyUpload</code>组件其实就是把<code>Upload</code>组件包装了一下，<code>Upload</code>原本的属性事件都能直接用在<code>MyUpload</code>上，并且为自己定制了<code>data</code>的默认属性。</p>
 
     </article>
@@ -424,7 +424,7 @@ height:50vh;
             <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
             </p><p>原文链接：<a href="https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/">https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/</a>
             </p><p>发表日期：<a href="https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/">August 6th 2019, 11:40:07 pm</a>
-            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/">May 15th 2020, 5:40:53 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2019/08/06/在vue组件中实现属性透传/">September 4th 2021, 10:00:54 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -790,6 +790,38 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 19
@@ -930,19 +962,25 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
     
-        <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
-    
         <span class="sidebar-tag-name" data-tags="Mac"><span class="iconfont-archer">&#xe606;</span>Mac</span>
     
         <span class="sidebar-tag-name" data-tags="Sangfor"><span class="iconfont-archer">&#xe606;</span>Sangfor</span>
     
         <span class="sidebar-tag-name" data-tags="EasyConnect"><span class="iconfont-archer">&#xe606;</span>EasyConnect</span>
     
+        <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
+    
         <span class="sidebar-tag-name" data-tags="nginx"><span class="iconfont-archer">&#xe606;</span>nginx</span>
     
         <span class="sidebar-tag-name" data-tags="rust"><span class="iconfont-archer">&#xe606;</span>rust</span>
     
         <span class="sidebar-tag-name" data-tags="lifetime"><span class="iconfont-archer">&#xe606;</span>lifetime</span>
+    
+        <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="dble"><span class="iconfont-archer">&#xe606;</span>dble</span>
+    
+        <span class="sidebar-tag-name" data-tags="mycat"><span class="iconfont-archer">&#xe606;</span>mycat</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
@@ -951,12 +989,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
         <span class="sidebar-tag-name" data-tags="javascript"><span class="iconfont-archer">&#xe606;</span>javascript</span>
-    
-        <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
-    
-        <span class="sidebar-tag-name" data-tags="dble"><span class="iconfont-archer">&#xe606;</span>dble</span>
-    
-        <span class="sidebar-tag-name" data-tags="mycat"><span class="iconfont-archer">&#xe606;</span>mycat</span>
     
         <span class="sidebar-tag-name" data-tags="angular"><span class="iconfont-archer">&#xe606;</span>angular</span>
     
@@ -1009,11 +1041,11 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Rust"><span class="iconfont-archer">&#xe60a;</span>Rust</span>
     
+        <span class="sidebar-category-name" data-categories="Database"><span class="iconfont-archer">&#xe60a;</span>Database</span>
+    
         <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
     
         <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
-    
-        <span class="sidebar-category-name" data-categories="Database"><span class="iconfont-archer">&#xe60a;</span>Database</span>
     
         <span class="sidebar-category-name" data-categories="Angular"><span class="iconfont-archer">&#xe60a;</span>Angular</span>
     
