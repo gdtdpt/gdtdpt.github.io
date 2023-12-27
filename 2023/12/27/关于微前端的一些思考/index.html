@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>关于微前端的理解 · Richard&#39;s Blog</title>
+    <title>关于微前端的一些思考 · Richard&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Richard&#39;s Blog</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">关于微前端的理解</a>
+                <a href="#" class="post-name">关于微前端的一些思考</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            关于微前端的理解
+            关于微前端的一些思考
             <!-- 404 -->
             
         </h1>
@@ -405,9 +405,9 @@ height:50vh;
     <article class="article-entry">
         <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><p>所谓微前端（Micro-Frontend）更像是一种新的高技术栈宽容度的开发框架，它看似能解决一些异构前端整合的问题，却也没有完全解决。对于存量前端项目在接入微前端时需要非常高的适配成本。所以我认为所谓的微前端更多的是对标微服务（Microservice）一种噱头。</p>
 <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>其他项目组 A 采购了一套所谓”自主研发”的微前端框架，并基于这套框架开发了一个项目，实现业务功能之余还希望整合复杂切凌乱的内部各个系统域名不同、登录状态不通的问题。然后项目组 A 找到了我，需要接入我之前设计构建的系统。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>我设计的系统是标准的同域下微服务应用，前端是每个提供服务的微服务各自对应一个前端项目，公共代码使用’git submodule’共享。各微服务前端业务调用自身对应的微服务后端接口，前端不跨微服务调用，如果有调用其他微服务的需求那是当前微服务的业务需要，微服务后端自身根据业务需要通过微服务后台相互调用。<br><img src="/assets/micro-frontend_1.png" alt="micro-frontend_1"><br>这样设计一是为了防止前后端、微服务开发者之间推锅，前端出现的报错肯定是对应的后端返回，不需要再让前端排查是调用的哪个微服务；二是前端代码项目的代码更能针对对应微服务业务，前端出现问题是影响面会小很多。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>我设计的系统是标准的同域下微服务应用，前端是每个提供服务的微服务各自对应一个前端项目，公共代码使用<code>git submodule</code>共享。各微服务前端业务调用自身对应的微服务后端接口，前端不跨微服务调用，如果有调用其他微服务的需求那是当前微服务的业务需要，微服务后端自身根据业务需要通过微服务后台相互调用。<br><img src="/assets/micro-frontend_1.png" alt="micro-frontend_1"><br>这样设计一是为了防止前后端、微服务开发者之间推锅，前端出现的报错肯定是对应的后端返回，不需要再让前端排查是调用的哪个微服务；二是前端代码项目的代码更能针对对应微服务业务，前端出现问题是影响面会小很多。</p>
 <p>在架构上使用<code>nginx</code>之类的网络负载把所有前后端拉到同一个域名下，这样前、后端在编码中不需要添加任何 IP/域名的配置，前后端部署在什么位置也不需要关心，只要能拉到同一个域名下就可以。</p>
-<p>上面的架构我认为也算一些”类微前端”的实现，每个前端项目各自维护自身业务代码，通用代码通过’git submodule’共享，部署后在同域下共同使用浏览器同域下的资源（localStorage、cookies、sessionStorage 等）。各前端项目路由相当于后端微服务暴露的服务，在同域下下简单的<code>window.replace</code>就可以进行跳转，传递数据可以通过 url，也可以使用共享的资源。</p>
+<p>上面的架构我认为也算一些”类微前端”的实现，每个前端项目各自维护自身业务代码，通用代码通过<code>git submodule</code>共享，部署后在同域下共同使用浏览器同域下的资源（localStorage、cookies、sessionStorage 等）。各前端项目路由相当于后端微服务暴露的服务，在同域下下简单的<code>window.replace</code>就可以进行跳转，传递数据可以通过 url，也可以使用共享的资源。</p>
 <p>然而这个架构接入项目组 A 的微前端框架却遇到了巨大的困难，这不经让我思考到底什么是微服务。举两个所遇到的困难，首先我们的前后端并不跨域，所以没有任何一个服务、中间件存在处理跨域请求的配置；第二个是我们的前端使用<code>window.replace</code>在各前端项目之间跳转，任意一个前端项目并没有其他前端项目的路由配置，所以跳转并不能完全以<code>hash</code>的方式跳转，但是外层微前端框架的 url 是固定的不能改变，内部的微前端项目就无法使用<code>windows.replace</code>进行跳转。</p>
 <h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><blockquote>
 <p>所以到底什么是微前端，它到底尝试或者已经解决什么问题？</p>
@@ -421,9 +421,9 @@ height:50vh;
     
         <div class="license-wrapper">
             <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
-            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的理解/">https://www.huangyuexiang.com/2023/12/27/关于微前端的理解/</a>
-            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的理解/">December 27th 2023, 8:00:00 am</a>
-            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的理解/">December 27th 2023, 6:31:40 pm</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/">https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/">December 27th 2023, 8:00:00 am</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/">December 27th 2023, 6:34:26 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -783,20 +783,6 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 20
@@ -815,7 +801,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/27</span><a class="archive-post-title" href="/2023/12/27/关于微前端的理解/">关于微前端的理解</a>
+            <span class="archive-post-date">12/27</span><a class="archive-post-title" href="/2023/12/27/关于微前端的一些思考/">关于微前端的一些思考</a>
         </li>
     
     
@@ -951,21 +937,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
     
+        <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
+    
+        <span class="sidebar-tag-name" data-tags="nginx"><span class="iconfont-archer">&#xe606;</span>nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="rust"><span class="iconfont-archer">&#xe606;</span>rust</span>
+    
+        <span class="sidebar-tag-name" data-tags="ownership"><span class="iconfont-archer">&#xe606;</span>ownership</span>
+    
         <span class="sidebar-tag-name" data-tags="Mac"><span class="iconfont-archer">&#xe606;</span>Mac</span>
     
         <span class="sidebar-tag-name" data-tags="Sangfor"><span class="iconfont-archer">&#xe606;</span>Sangfor</span>
     
         <span class="sidebar-tag-name" data-tags="EasyConnect"><span class="iconfont-archer">&#xe606;</span>EasyConnect</span>
     
-        <span class="sidebar-tag-name" data-tags="nginx"><span class="iconfont-archer">&#xe606;</span>nginx</span>
-    
-        <span class="sidebar-tag-name" data-tags="rust"><span class="iconfont-archer">&#xe606;</span>rust</span>
-    
         <span class="sidebar-tag-name" data-tags="lifetime"><span class="iconfont-archer">&#xe606;</span>lifetime</span>
-    
-        <span class="sidebar-tag-name" data-tags="ownership"><span class="iconfont-archer">&#xe606;</span>ownership</span>
-    
-        <span class="sidebar-tag-name" data-tags="serde"><span class="iconfont-archer">&#xe606;</span>serde</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
@@ -975,21 +961,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="frontend"><span class="iconfont-archer">&#xe606;</span>frontend</span>
     
+        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="javascript"><span class="iconfont-archer">&#xe606;</span>javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="serde"><span class="iconfont-archer">&#xe606;</span>serde</span>
+    
         <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
     
         <span class="sidebar-tag-name" data-tags="dble"><span class="iconfont-archer">&#xe606;</span>dble</span>
     
         <span class="sidebar-tag-name" data-tags="mycat"><span class="iconfont-archer">&#xe606;</span>mycat</span>
     
-        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
-    
-        <span class="sidebar-tag-name" data-tags="javascript"><span class="iconfont-archer">&#xe606;</span>javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="angular"><span class="iconfont-archer">&#xe606;</span>angular</span>
     
         <span class="sidebar-tag-name" data-tags="typescript"><span class="iconfont-archer">&#xe606;</span>typescript</span>
-    
-        <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1028,19 +1014,19 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
     
-        <span class="sidebar-category-name" data-categories="Blog"><span class="iconfont-archer">&#xe60a;</span>Blog</span>
-    
         <span class="sidebar-category-name" data-categories="Nginx"><span class="iconfont-archer">&#xe60a;</span>Nginx</span>
     
         <span class="sidebar-category-name" data-categories="Rust"><span class="iconfont-archer">&#xe60a;</span>Rust</span>
+    
+        <span class="sidebar-category-name" data-categories="Blog"><span class="iconfont-archer">&#xe60a;</span>Blog</span>
     
         <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
     
         <span class="sidebar-category-name" data-categories="frontend"><span class="iconfont-archer">&#xe60a;</span>frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Database"><span class="iconfont-archer">&#xe60a;</span>Database</span>
-    
         <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="Database"><span class="iconfont-archer">&#xe60a;</span>Database</span>
     
         <span class="sidebar-category-name" data-categories="Angular"><span class="iconfont-archer">&#xe60a;</span>Angular</span>
     
