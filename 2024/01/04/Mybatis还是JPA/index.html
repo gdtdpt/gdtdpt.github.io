@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Richard&#39;s Blog</title>
+    <title>Mybatis还是JPA · Richard&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,12 +203,23 @@
 </head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Richard&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Mybatis还是JPA</a>
+            </div>
+    </div>
     
     <a class="home-link" href="/">Richard's Blog</a>
 </header>
@@ -220,24 +231,68 @@
 
 
 
+
+height:50vh;
 ">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            Mybatis还是JPA
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.7k</span>阅读时长: <span class="post-count reading-time">6 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2024/01/04</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -338,44 +393,67 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/02/09/Scrapy学习笔记——Scrapy概览/">
-            
-                <span>Scrapy学习笔记——Scrapy概览</span>
-        </a>
-        <div class="abstract-content">
-            Scrapy 开发中需要编程的内容Spider爬虫，负责提取页面中的数据，返回dict或Item子类实例。
-Item封装爬取到的数据，在Spider中返回。Item包含特殊的字段及方法便于其他Scrapy组件使用。
-Item Pipeline用于处理数据，在settings.py中定义需要处理数据的Item Pipeline和优先级，数据会以优先级从高到低依次传递给所有在settings.py中被定义的Item Pipeline，直至最后或数据被丢弃。
-Exporter用于导出数据，Scrapy内部实现了多个Exporters，每个Exporter实现一种导出的数据格式，自定义Expor...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/02/09</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="scrapy">scrapy</a>
-    
-</div>
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>记得在刚还没毕业准备找工作的时候，为了能更有竞争力，在网上找了一套教程跟着做，当时忘记是哪里找的了，是一套 spring + struts2 + hibernate 的技术栈，我照着教程写了一篇，当时没什么感觉，觉得 HQL 也挺方便的，而且大多数时候不需要写 HQL，Hibernate 的注解会自动映射 Entity，只是在编码时需要注意 Entity 的状态，是在线还是离线状态，记得当时为了省事，不管在线还是离线最后都 save 一下。</p>
+<a id="more"></a>
+<p>虽然当时已经看到很多文章都会说阿里用 Mybatis，Mybatis 就是好之类的，但是不知道是不是因为我学的教程的原因，找到的第一份工作也是使用 Hibernate 的，但是是一套很老的框架，MVC 使用的是 struts1.x。当时那套框架被技术主管做了深度定制，虽然是 hibernate，但是只需要写一条包含了各种符号的 Hibernate 就可以适配大多数情况，Service 层也其实就是调一下框架的方法就可以直接查询。</p>
+<p>再后来跳槽就没有再遇到过使用 Hibernate/JPA 的公司了，之后的编码就在无尽的 mapper.xml、mapper.java 之间切换，遇到过很多问题。比如直接用 generator 生成 mapper 的 xml 和类，然后手动修改了一些生成的出来的 SQL，又被其他同事重新生成给覆盖掉，导致程序出错。比如为了不写基础 mapper.xml，引入了 Mybatis-Plus，然后觉得 Mybatis-Plus 的 join 功能不是很方便，又引入了 Mybatis-Plus-Join，看着这些依赖所解决的问题，不经陷入了思考。</p>
+<p>在使用 Mybatis 家族一段时间后，有几个问题一时困扰着我，<code>自动生成真的好吗，Mybatis的最佳实践到底是什么，阿里用Mybatis难道Mybatis就一定是对的选择吗，为什么不使用JPA？</code></p>
+<h2 id="自动生成真的好吗"><a href="#自动生成真的好吗" class="headerlink" title="自动生成真的好吗"></a>自动生成真的好吗</h2><p>我认为是不好的，我对生成出来的代码是否真的能满足需求一直有一种不信任感，虽然问过很多这样编码的同学，他们说反正生成出来不满足改一下就好了，总比自己写来的方便。但是我总是怕万一改漏了呢，万一生成的默认代码存在无法马上察觉的问题，上生产后导致数据错乱怎么办。生成的代码总感觉不是刚刚好能满足我的需求的代码，总会在某些情况下出现一些没有用上但是没人删除的代码。这部分代码在修改的时候也极为麻烦，不确定是否真的没有使用到，导致修改的时候畏首畏尾，无奈还是重新写一个算了。感觉很多”屎山”就是这么来的</p>
+<h2 id="阿里用-Mybatis-难道-Mybatis-就一定是对的选择吗"><a href="#阿里用-Mybatis-难道-Mybatis-就一定是对的选择吗" class="headerlink" title="阿里用 Mybatis 难道 Mybatis 就一定是对的选择吗"></a>阿里用 Mybatis 难道 Mybatis 就一定是对的选择吗</h2><p>虽然没在阿里就职过，不清楚阿里内部对 Mybatis 的使用是什么情况。但是在反复看了很多次 Mybatis 的官网和各种关于 Mybatis 的资料后，突然有一种感觉，绝大多数项目其实根本不需要 Mybatis，他们都用错了。在我看来更多的情况特别是引入了 Mybatis-Plus 这个组件的项目更应该使用 JPA。</p>
+<p>我认为 Mybatis 作为一个<code>动态SQL</code>的工具，不应该只是单纯的对照着表结构做查询，单纯的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span>;</span><br></pre></td></tr></table></figure>
+<p>然后返回一个 table 的表对象这种需求，直接使用 JPA 更好，还能省去编写/生成 mapper.xml 的问题。</p>
+<h2 id="所以-Mybatis-的最佳实践到底是什么"><a href="#所以-Mybatis-的最佳实践到底是什么" class="headerlink" title="所以 Mybatis 的最佳实践到底是什么"></a>所以 Mybatis 的最佳实践到底是什么</h2><p>在我尝试了几个项目后，我觉得 Mybatis 的最佳实践是让所有包括 Controller/Service 层的代码更贴近业务，面向业务编程。<br>我身边的绝大部分 Java Web 开发都有一个惯性，先把业务代码转换为对哪几张表查询，用表字段去拼凑所需要的数据，查询的语句也是简单语句，<resultmap>中的定义也只有<id>、<result>等少数标签。</result></id></resultmap></p>
+<p>我认为这不是使用 Mybatis 的正确方法，正确方法应该是<resultmap>的定义就已经尽量接近业务所需要的数据结构，然后使用比如<collection>、<association>等标签让 Mybatis 帮助我们组装，对应的<select>语句满足<resultmap>中定义的数据。只要数据设计得当，可以大量减少<code>list()</code>之后再另一个表<code>queryByIds(ids)</code>之类的操作。</resultmap></select></association></collection></resultmap></p>
+<p>我印象最深的是有一个需求是需要返回一个复合对象，主要对象所在的表对其他表有 OneToMany 也有 ManyToOne 的关系，还需要多层关联数据，刚好查询的 SQL 都包含了这些信息，于是我写了只在 Mapper.xml 里写了一个这样的定义</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">collection</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">association</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">association</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">collection</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">collection</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">collection</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>就已经完成了业务需要的返回数据。我认为这才是 Mybatis 的正确使用方式。</p>
+<p>在 SQL 编写上，在我周围鲜少有人使用<include>、<property>等标签，我觉得这简直浪费了 Mybatis 的<code>动态SQL</code>的特点，无尽的<if>、<foreach>浪费了<code>动态SQL</code>的神奇。虽然这样会使得 SQL 语句变得破碎，阅读和排查问题更加繁琐，但是在实践后发现，其实用到的地方并不多，所以不太会出现大量碎片 SQL 的情况，但是对于能把相同的 SQL 抽出来以不同的入参像调用方法一样使它生成略有区别的 SQL 还是很舒服的。</foreach></if></property></include></p>
+<h2 id="Mybatis-与-JPA"><a href="#Mybatis-与-JPA" class="headerlink" title="Mybatis 与 JPA"></a>Mybatis 与 JPA</h2><p>如果在选择技术栈的时候还没有领悟<code>面向业务</code>编程的概念，我个人还是建议使用 JPA，虽然有的人可能看了一些文章会说 JPA 写复杂 SQL 麻烦，没有 Mybatis 好，但是像上面说的项目，Mybatis 最后演变成<code>Mybatis + Mybatis-Plus + Mybatis-Plus-Join</code>就真的比 JPA 写复杂 SQL 好吗。</p>
+<p>不管怎么说 JPA 还是 Java 官方定义的一套规范，虽然现在主流实现还是只有 Hibernate，但是如果做不到<code>面向业务</code>编程的话，JPA 还是更方便，只是中文资料确实是比 Mybatis 少就是了。做程序员不会英语的话还是趁早转行。</p>
+<p>有能力<code>面向业务</code>编程后，使用 Mybatis 时就会发现，根本不需要什么生成代码，你的 Service 是根据业务来的，没有哪两个业务是相同的逻辑，也极少出现单表查询，这时的 Mybatis 会让你只需要关注业务，数据交给 Mybatis 帮你组装。</p>
+
     </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2024/01/04/Mybatis还是JPA/">https://www.huangyuexiang.com/2024/01/04/Mybatis还是JPA/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2024/01/04/Mybatis还是JPA/">January 4th 2024, 6:12:14 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2024/01/04/Mybatis还是JPA/">January 5th 2024, 7:47:28 pm</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/12/28/是否应该为Springboot的Service层创建interface/" title="是否应该为Springboot的Service层创建interface">
+                    <div class="prevTitle">是否应该为Springboot的Service层创建interface</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -453,6 +531,24 @@ Exporter用于导出数据，Scrapy内部实现了多个Exporters，每个Export
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动生成真的好吗"><span class="toc-number">1.</span> <span class="toc-text">自动生成真的好吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阿里用-Mybatis-难道-Mybatis-就一定是对的选择吗"><span class="toc-number">2.</span> <span class="toc-text">阿里用 Mybatis 难道 Mybatis 就一定是对的选择吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#所以-Mybatis-的最佳实践到底是什么"><span class="toc-number">3.</span> <span class="toc-text">所以 Mybatis 的最佳实践到底是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mybatis-与-JPA"><span class="toc-number">4.</span> <span class="toc-text">Mybatis 与 JPA</span></a></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -1034,6 +1130,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>

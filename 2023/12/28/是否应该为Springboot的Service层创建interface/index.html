@@ -410,6 +410,7 @@ height:50vh;
 <li>为了扩展，可以在有需要的时候方便的替换为别的实现，通过 Spring 的依赖注入，不需要修改调用端代码</li>
 <li>为了让 Spring 使用比 cglib 更高效的动态代理</li>
 </ul>
+<a id="more"></a>
 <p>当我写了很多很多的后端代码，经常会遇到需要在 Service 添加一个方法的时候，需要编辑 interface 再写 impl 代码逻辑，明明这个 interface 实现就只有一个，基本不可能会有另一个 impl 去实现，为了虚无飘渺的高效动态代理真的有必要吗？</p>
 <p>再后来，轮到我主持项目的时候，我就再也不写 Service 的 interface 了，然而整个项目上线后，也没出现过什么性能问题。直到后来有需要把项目中权限控制相关功能使用的 shrio 修改为 spring-security 时，验证相关的 Service 需要一个的方法模板来确保顺利切换，才创建了一个 interface 用于在开发阶段统一验证相关的方法分别在 shrio 和 spring-security 中实现。等 spring-security 实现完后，只需要将注入 IoC 的 Service 从 shrio 实现的 impl 切换为 spring-security 实现的 impl 就可以完成切换技术栈。</p>
 <p>今天刚好又看到一个视频聊到这个问题，视频中有说到 Mybatis 的一个代码生成插件的作者的<a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener">代码库</a>中在很久之前有用户提过一个类似的<a href="https://github.com/jhipster/generator-jhipster/issues/65" target="_blank" rel="noopener">issue</a>，问到代码生成时，是否能提供生成@Service 类的 interface 文件。</p>
@@ -424,13 +425,18 @@ height:50vh;
             <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
             </p><p>原文链接：<a href="https://www.huangyuexiang.com/2023/12/28/是否应该为Springboot的Service层创建interface/">https://www.huangyuexiang.com/2023/12/28/是否应该为Springboot的Service层创建interface/</a>
             </p><p>发表日期：<a href="https://www.huangyuexiang.com/2023/12/28/是否应该为Springboot的Service层创建interface/">December 28th 2023, 5:06:19 pm</a>
-            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2023/12/28/是否应该为Springboot的Service层创建interface/">December 28th 2023, 7:08:58 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2023/12/28/是否应该为Springboot的Service层创建interface/">December 29th 2023, 8:11:29 am</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2024/01/04/Mybatis还是JPA/" title="Mybatis还是JPA">
+                    <div class="nextTitle">Mybatis还是JPA</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -809,9 +815,24 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 21
+        Total : 22
         </div>
         <!-- search  -->
         
@@ -821,6 +842,20 @@ top:50vh;
     
     
     
+    
+    <div class="archive-year"> 2024 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span><a class="archive-post-title" href="/2024/01/04/Mybatis还是JPA/">Mybatis还是JPA</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
     
     <div class="archive-year"> 2023 </div>
     <ul class="year-list">
@@ -968,12 +1003,6 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="golang"><span class="iconfont-archer">&#xe606;</span>golang</span>
     
-        <span class="sidebar-tag-name" data-tags="Mac"><span class="iconfont-archer">&#xe606;</span>Mac</span>
-    
-        <span class="sidebar-tag-name" data-tags="Sangfor"><span class="iconfont-archer">&#xe606;</span>Sangfor</span>
-    
-        <span class="sidebar-tag-name" data-tags="EasyConnect"><span class="iconfont-archer">&#xe606;</span>EasyConnect</span>
-    
         <span class="sidebar-tag-name" data-tags="compile"><span class="iconfont-archer">&#xe606;</span>compile</span>
     
         <span class="sidebar-tag-name" data-tags="nginx"><span class="iconfont-archer">&#xe606;</span>nginx</span>
@@ -982,17 +1011,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="lifetime"><span class="iconfont-archer">&#xe606;</span>lifetime</span>
     
-        <span class="sidebar-tag-name" data-tags="serde"><span class="iconfont-archer">&#xe606;</span>serde</span>
-    
         <span class="sidebar-tag-name" data-tags="ownership"><span class="iconfont-archer">&#xe606;</span>ownership</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
         <span class="sidebar-tag-name" data-tags="scrapy"><span class="iconfont-archer">&#xe606;</span>scrapy</span>
     
-        <span class="sidebar-tag-name" data-tags="micro-forntends"><span class="iconfont-archer">&#xe606;</span>micro-forntends</span>
-    
-        <span class="sidebar-tag-name" data-tags="frontend"><span class="iconfont-archer">&#xe606;</span>frontend</span>
+        <span class="sidebar-tag-name" data-tags="serde"><span class="iconfont-archer">&#xe606;</span>serde</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
@@ -1013,6 +1038,16 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="angular"><span class="iconfont-archer">&#xe606;</span>angular</span>
     
         <span class="sidebar-tag-name" data-tags="typescript"><span class="iconfont-archer">&#xe606;</span>typescript</span>
+    
+        <span class="sidebar-tag-name" data-tags="micro-forntends"><span class="iconfont-archer">&#xe606;</span>micro-forntends</span>
+    
+        <span class="sidebar-tag-name" data-tags="frontend"><span class="iconfont-archer">&#xe606;</span>frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mac"><span class="iconfont-archer">&#xe606;</span>Mac</span>
+    
+        <span class="sidebar-tag-name" data-tags="Sangfor"><span class="iconfont-archer">&#xe606;</span>Sangfor</span>
+    
+        <span class="sidebar-tag-name" data-tags="EasyConnect"><span class="iconfont-archer">&#xe606;</span>EasyConnect</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1051,15 +1086,11 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Go"><span class="iconfont-archer">&#xe60a;</span>Go</span>
     
-        <span class="sidebar-category-name" data-categories="Blog"><span class="iconfont-archer">&#xe60a;</span>Blog</span>
-    
         <span class="sidebar-category-name" data-categories="Nginx"><span class="iconfont-archer">&#xe60a;</span>Nginx</span>
     
         <span class="sidebar-category-name" data-categories="Rust"><span class="iconfont-archer">&#xe60a;</span>Rust</span>
     
         <span class="sidebar-category-name" data-categories="Scrapy"><span class="iconfont-archer">&#xe60a;</span>Scrapy</span>
-    
-        <span class="sidebar-category-name" data-categories="frontend"><span class="iconfont-archer">&#xe60a;</span>frontend</span>
     
         <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
     
@@ -1069,7 +1100,11 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Angular"><span class="iconfont-archer">&#xe60a;</span>Angular</span>
     
+        <span class="sidebar-category-name" data-categories="frontend"><span class="iconfont-archer">&#xe60a;</span>frontend</span>
+    
         <span class="sidebar-category-name" data-categories="SpringBoot/Backend"><span class="iconfont-archer">&#xe60a;</span>SpringBoot/Backend</span>
+    
+        <span class="sidebar-category-name" data-categories="Blog"><span class="iconfont-archer">&#xe60a;</span>Blog</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
