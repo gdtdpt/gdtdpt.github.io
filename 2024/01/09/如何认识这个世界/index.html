@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>关于微前端的一些思考 · Richard&#39;s Blog</title>
+    <title>如何认识这个世界 · Richard&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Richard&#39;s Blog</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">关于微前端的一些思考</a>
+                <a href="#" class="post-name">如何认识这个世界</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            关于微前端的一些思考
+            如何认识这个世界
             <!-- 404 -->
             
         </h1>
@@ -266,20 +266,18 @@ height:50vh;
                 
                     <div class="post-intro-tags">
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="micro-forntends">micro-forntends</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="frontend">frontend</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Blog">Blog</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">1.2k</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">2.3k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2023/12/27</span>
+                    <span class="post-intro-time">2024/01/09</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -403,28 +401,24 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><p>所谓微前端（Micro-Frontend）更像是一种新的高技术栈宽容度的开发框架，它看似能解决一些异构前端整合的问题，却也没有完全解决。对于存量前端项目在接入微前端时需要非常高的适配成本。所以我认为所谓的微前端更多的是对标微服务（Microservice）一种噱头。</p>
+        <p>这个标题想了好久，感觉只能以这种宽泛的说法来概括。<br>有写点东西的想法的起因是有一天在油管上看视频，旁边推荐了一个视频叫《如何培养深度思考的习惯？》，视频内容很枯燥，一个 AI 合成的声音在读稿子读 10 分钟，总结只有五点，但是每说一点就会说一段很长的解释，具体内容放在文章末尾。</p>
+<p>当时无聊就加速看了一下，虽然视频和 AI 合成的声音让人很不耐烦，内容也看似是一些正确的废话，但是突然联想到现在网上有很多在一个社区里说不到十句就开始键起来的网友，他们的很多不太行的观点基本上都能通过视频内容所说的方式自己找答案，而不需要在网上自怨自艾、阴阳怪气。</p>
 <a id="more"></a>
-<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>其他项目组 A 采购了一套所谓”自主研发”的微前端框架，并基于这套框架开发了一个项目，实现业务功能之余还希望整合复杂切凌乱的内部各个系统域名不同、登录状态不通的问题。然后项目组 A 找到了我，需要接入我之前设计构建的系统。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>我设计的系统是标准的同域下微服务应用，前端是每个提供服务的微服务各自对应一个前端项目，公共代码使用<code>git submodule</code>共享。各微服务前端业务调用自身对应的微服务后端接口，前端不跨微服务调用，如果有调用其他微服务的需求那是当前微服务的业务需要，微服务后端自身根据业务需要通过微服务后台相互调用。<br><img src="/assets/micro-frontend_1.png" alt="micro-frontend_1"><br>这样设计一是为了防止前后端、微服务开发者之间推锅，前端出现的报错肯定是对应的后端返回，不需要再让前端排查是调用的哪个微服务；二是前端代码项目的代码更能针对对应微服务业务，前端出现问题是影响面会小很多。</p>
-<p>在架构上使用<code>nginx</code>之类的网络负载把所有前后端拉到同一个域名下，这样前、后端在编码中不需要添加任何 IP/域名的配置，前后端部署在什么位置也不需要关心，只要能拉到同一个域名下就可以。</p>
-<p>上面的架构我认为也算一些”类微前端”的实现，每个前端项目各自维护自身业务代码，通用代码通过<code>git submodule</code>共享，部署后在同域下共同使用浏览器同域下的资源（localStorage、cookies、sessionStorage 等）。各前端项目路由相当于后端微服务暴露的服务，在同域下下简单的<code>window.replace</code>就可以进行跳转，传递数据可以通过 url，也可以使用共享的资源。</p>
-<p>然而这个架构接入项目组 A 的微前端框架却遇到了巨大的困难，这不经让我思考到底什么是微服务。举两个所遇到的困难，首先我们的前后端并不跨域，所以没有任何一个服务、中间件存在处理跨域请求的配置；第二个是我们的前端使用<code>window.replace</code>在各前端项目之间跳转，任意一个前端项目并没有其他前端项目的路由配置，所以跳转并不能完全以<code>hash</code>的方式跳转，但是外层微前端框架的 url 是固定的不能改变，内部的微前端项目就无法使用<code>windows.replace</code>进行跳转。</p>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><blockquote>
-<p>所以到底什么是微前端，它到底尝试或者已经解决什么问题？</p>
-</blockquote>
-<p>后端微服务化为服务提供了良好的横向扩展能力，同时能让各服务可以方便的提供给其他微服务调用。类比微前端我认为真正的微前端应该是可以各前端项目暴露组件，其他前端项目可以直接导入复用。但是现有的微前端框架只是让异构应用(vue/angular/react 等)能在一个 layout 内不使用<code>iframe</code>的方式跳转并展示出来，一些高级功能需要修改存量系统，添加一些监听代码，响应事件并作出处理。</p>
-<p>但是对于存量系统，比如上面我设计的架构，并不能完全适配，修改时就会出现到底该谁来修改问题。比如我为了保证不引入新坑，我拒绝项目组 A 要求的在 axios 中加入域名/IP 的请求。</p>
-<p>所谓的”微前端”框架，我认为更像是一种新的开发模式，开发模式的意思是所有的前端项目可以不强制使用同一技术栈，且还都在开发中，可以针对微前端框架做编码上的修改和定制，但是对于存量已上线并正常运行了一段时间，甚至当初的开发人员已不在了的情况下，擅自修改现有开发规范、修改底层配置等很可能会引入一些新的问题让存量系统项目组的维护变得痛苦。</p>
+<p>不知道什么时候开始，周围的人都变得喜欢键，仿佛自己生活在这片陆地上就吃了大亏了，到底都是黑暗。这让我时不时想起很小很小的时候，在电视上看过一个讲纪晓岚的节目，不记得主持人还是旁白介绍纪晓岚的”观弈道人”的由来的时候说纪晓岚有一幅画，内容是三个人，两个人在对弈，一个人在旁观棋。纪晓岚还年轻的时候认为自己是对弈的两人中的一人，但是到了晚年却觉得应该做旁边那个观棋的人。不知道为什么这个观点深深的留在了我的记忆里，以至于遇到什么事物我都总是会尝试从多个角度看待，自然而然的都使用了原视频中说到的一些方法。然而看到有很多人喜欢键的人，总觉得他们是认为自己在对弈局中，能左右棋局的走向，不管什么事非要在网上以片面的观点辩几个来回，感觉非常没有意义。</p>
+<h2 id="原视频内容"><a href="#原视频内容" class="headerlink" title="原视频内容"></a>原视频内容</h2><p>一、学会辨别信息的真伪，我们生活在信息爆炸的时代，大量的信息充斥着我们的生活，但并不是所有的信息都是准确可靠的。我可以很负责任的说，你所接收到的 99.99%的信息，都是别人想让你知道的，包括你正在看的这往篇文章，甚至可以说每条信息的背后都可能潜在某个目的。就像卖茶叶的女孩加了你后，不止说茶叶，先跟你聊聊她的爷爷，还有那些打着为你好的幌子，实际上是推销产品或吸引流量的文章，也随处可见，小到娱乐新闻吃吃瓜，大到碰见渣男 PUA，如果是完全的老实人思维，就很容易言听计从掉坑里，成为某种利益下的牺牲者。所以在接收到一个信息时，我们不能盲目接受和情绪化的判断，而是要问自己三个问题，这个信息的来源是否可靠，这个信息传播的目的是什么，他为什么会有这个观点。特别是要对我们习以为常的事情发问，因为我们最容易相信的就是那些我们习惯的观点，Visa 的创始人狄霍克说过，问题永远不在于如何使用头脑里产生的崭新的创造性的思想，而在于如何从头脑里淘汰旧观念。</p>
+<p>二、不断缩减知识盲区的范围。思考的深度，很大程度上取决于所接触信息的广度。如果你跟别人谈论他的认知盲区，那么不仅你会解释的很累，还可能被质疑和挟击。你说的我全没听过，我读书少你别骗我，夏虫不可语冰，冬天完全超出他的认知范围。同理大海和天空也是井底之蛙的认知盲区。所以要尽量缩小自己知识盲区的范围。让自己的思维经历一次次高飞和冒险，我们每个人都有自己的专业领域，但是仅仅局限于一个领域，会导致我们在其他领域的思考能力受限，所以我们应该积极主动地涉猎不同领域的知识，拓宽自己的视野，除了阅读不同领域的书籍，多听一些 TED 演讲也是很好的方式。这些演讲会带给我们很多启发，让我们思考自己的人生的意义，还可以多和不同行业，不同类型的人交流，也能够加深我们对世界的认知，培养我们的思维跳跃性。</p>
+<p>三、学会逻辑反推。大多数人的思维逻辑，都是简单线性正向的，即因果关系的顺推思维方式，但很少有人去深究这两个事件到底有没有关系。比如有人告诉你，告白被拒是因为你长的不够好看，身材不够好，如果你长得好身材好，就一定会成功，乍一听好像是有点道理，但仔细一琢磨，除了颜值身材，难道不应该考虑性格人品家境吗？类似这种偷换概念的观点随处可见。熊孩子的母亲说他还是个孩子，所以你不能怪他，该不该原谅熊孩子，难道不应该取决于被伤害方吗？为什么年龄小我就非要原谅？还有人会利用这种顺推思维，来给你设套，比如大数人的思维惯性就是如果一件商品的质量和口碑很好，那么他就会供不应求，而一些商家会借此进行饥饿营销。他们要的效果就是让你有钱也买不到。必须去抢，必须提前预定，让你产生商品火爆的错觉，如果没跳出这个逻辑的坑，就很容易陷进去，隐约感觉哪里不对，但又找不到反驳点，于是干脆不想了，时间一长便养成了反正都这样的习惯，再想深度思考就很难了。</p>
+<p>四、学会结构化思维。哲学家沃斯基硕德曾说过，人类的思维以分为三种。（1）感性思维 是一种点状思维，它的特点就是用直觉情绪对事件进行主观判断，显然这种思维也最不可取的，因为它会致命一个人在未知全貌的情况下带着情绪和偏见对一件事作出判断。（2）逻辑思维 是一种线性思维，它指的是利用因果逻辑关系进行正向推理，显然这种思维方式更加理性化。就像数学题里的证明一样，有原因才有结论。但是线性思维的维度过于单一，经常容易忽视事物的其他方面，使人对事物的认知停留在表层，陷入盲人摸象的状态。（3）结构思维 是一种面状思维。也可以说是一种整体性思维，是三种思维中最高级的思维，它把每一件事都看成一种结构。拥有这种思维的人，通常能够高效的处理问题。并且更容易进行深度思考。结构性思维包括以下四个步骤：第一、观察。在处理问题之前，我们需要先观察和了解问题的各个方面，比如在准备自驾游时，我们可以通过搜索目的地查看评价和周边环境的图片，来观察和了解目的地的情况。第二、判断。在观察的基础上我们需要进行判断，决定是否选择某个方案，或采取某个行动，在自驾游的例子中，我们可以根据观察到的信息，判断是否选择这个目的地。作为旅游的目标。第三、分析。在判断之后，我们需要进行分析。考虑各种因素和可能发生的情况，比如在自驾游的准备中，我们需要设计行车路线、保养车辆、加油，并考虑在路上的休息和用餐地点，还要考虑携带多少食物和水等。这些都是分析问题的步骤。第四、整合。在分析之后我们需要将所有的信息整合起来。制定一个完美的计划或解决方案。在自驾游中，我们将会观察判断和分析的结果整合起来。制定出一个详细的出行计划，确保旅行的顺利进行，通过这种结构化思维的方法，我们能够更清晰地组织思路，避免遗漏重要的细节，提高问题解决的效率和准确性。</p>
+<p>五、运用五 why 法延伸你的洞察深度</p>
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者：<a href="https://www.huangyuexiang.com">Richard Wong</a>
-            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/">https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/</a>
-            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/">December 27th 2023, 8:00:00 am</a>
-            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2023/12/27/关于微前端的一些思考/">December 29th 2023, 8:11:52 am</a>
+            </p><p>原文链接：<a href="https://www.huangyuexiang.com/2024/01/09/如何认识这个世界/">https://www.huangyuexiang.com/2024/01/09/如何认识这个世界/</a>
+            </p><p>发表日期：<a href="https://www.huangyuexiang.com/2024/01/09/如何认识这个世界/">January 9th 2024, 6:52:38 pm</a>
+            </p><p>更新日期：<a href="https://www.huangyuexiang.com/2024/01/09/如何认识这个世界/">January 9th 2024, 7:19:36 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -432,17 +426,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2023/12/28/是否应该为Springboot的Service层创建interface/" title="是否应该为Springboot的Service层创建interface">
-                    <div class="nextTitle">是否应该为Springboot的Service层创建interface</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/2021/02/01/Rust编程语言教程——如何使用Rust构建一个To-Do-List应用/" title="Rust编程语言教程——如何使用Rust构建一个To-Do List应用">
-                    <div class="prevTitle">Rust编程语言教程——如何使用Rust构建一个To-Do List应用</div>
+                <a href="/2024/01/04/Mybatis还是JPA/" title="Mybatis还是JPA">
+                    <div class="prevTitle">Mybatis还是JPA</div>
                 </a>
             
         </li>
@@ -554,7 +543,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TL-DR"><span class="toc-number">1.</span> <span class="toc-text">TL;DR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#起因"><span class="toc-number">2.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">3.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思考"><span class="toc-number">4.</span> <span class="toc-text">思考</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原视频内容"><span class="toc-number">1.</span> <span class="toc-text">原视频内容</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
